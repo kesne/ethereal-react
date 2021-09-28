@@ -1,16 +1,18 @@
-import { atom } from "jotai";
-import { useAtomValue } from "jotai/utils";
-import { requiredProviderAtom } from "./provider";
+import { ethers } from "ethers";
+import { createAsset } from "use-asset";
+import { useProvider } from "./provider";
 
-export const userAddressAtom = atom(async (get) => {
-  const provider = get(requiredProviderAtom);
-  return provider.getSigner().getAddress();
-});
+const userAddressCache = createAsset(
+  async (provider: ethers.providers.Web3Provider) => {
+    return provider.getSigner().getAddress();
+  }
+);
 
 export function useUserAddress() {
-  return useAtomValue(userAddressAtom);
+  const provider = useProvider();
+  return userAddressCache.read(provider);
 }
 
 export function useBalance() {
-
+  throw new Error("TODO: Implement");
 }

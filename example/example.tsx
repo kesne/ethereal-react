@@ -6,7 +6,7 @@ import { StrictMode, Suspense, useState } from "react";
 import { createRoot } from "react-dom";
 import {
   useConnectToWallet,
-  ConnectedToWallet,
+  WalletProvider,
   useTokenBalance,
   useContract,
   ERC721_ABI,
@@ -107,9 +107,9 @@ if (!globalThis.reactRoot) {
 globalThis.reactRoot.render(
   <StrictMode>
     <Suspense fallback="Loading...">
-      <ConnectedToWallet fallback={<ConnectButton />}>
+      <WalletProvider fallback={<ConnectButton />}>
         <App />
-      </ConnectedToWallet>
+      </WalletProvider>
     </Suspense>
   </StrictMode>
 );

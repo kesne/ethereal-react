@@ -1,17 +1,18 @@
 import { ethers } from "ethers";
-import { useCallback, useReducer, useState } from "react";
-import { requiredProviderAtom } from "./provider";
-import { createAsyncFamily } from "./utils/createAsyncFamily";
+import { useCallback, useReducer } from "react";
+import { createAsset } from "use-asset";
+import { useProvider } from "./provider";
 
 interface Contract {
   address: string;
   abi: ethers.ContractInterface;
 }
 
-export const useContract = createAsyncFamily(
-  async ({ address, abi }: Contract, get) => {
-    const provider = get(requiredProviderAtom);
-
+const contractAsset = createAsset(
+  async (
+    provider: ethers.providers.Web3Provider,
+    { address, abi }: Contract
+  ) => {
     // we need to check to see if this provider has a signer or not
     let signer;
     const accounts = await provider.listAccounts();
@@ -25,17 +26,24 @@ export const useContract = createAsyncFamily(
   }
 );
 
+export function useContract(contract: Contract) {
+  const provider = useProvider();
+  return contractAsset.read(provider, contract);
+}
+
 interface ReadContract {
   contract: ethers.Contract;
   function: string;
   args: any[];
 }
 
-export const useReadContract = createAsyncFamily(
-  (contractRead: ReadContract) => {
-    return contractRead.contract[contractRead.function](...contractRead.args);
-  }
-);
+const readContractAsset = createAsset(async (contractRead: ReadContract) => {
+  return contractRead.contract[contractRead.function](...contractRead.args);
+});
+
+export function useReadContract(contractRead: ReadContract) {
+  return readContractAsset.read(contractRead);
+}
 
 interface WriteContract {
   contract: ethers.Contract;
