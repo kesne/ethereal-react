@@ -1,6 +1,5 @@
-import { ReactNode, useCallback } from "react";
-import { useProvider } from ".";
-import { web3Modal } from "./provider";
+import React, { Fragment, ReactNode, useCallback } from "react";
+import { web3Modal, useProvider } from "./provider";
 
 interface Props {
   fallback: ReactNode;
@@ -19,8 +18,8 @@ export function ConnectedToWallet({ fallback, children }: Props) {
   const [provider] = useProvider();
 
   if (provider) {
-    return <>{children}</>;
+    return <Fragment>{children}</Fragment>;
   }
 
-  return <>{fallback}</>;
+  return <Fragment>{fallback}</Fragment>;
 }
