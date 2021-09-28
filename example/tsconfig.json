@@ -6,5 +6,5 @@
 			"ethical-react": ["../src"]
 		}
 	},
-	"include": ["./*"]
+	"include": ["./*", "../src/react.d.ts"]
 }
