@@ -4,7 +4,12 @@
 		"jsx": "react-jsx",
 		"paths": {
 			"ethical-react": ["../src"]
-		}
+		},
+		"types": [
+			"react/experimental",
+			"react-dom/experimental",
+			"vite/client"
+		]
 	},
 	"include": ["./*"]
 }

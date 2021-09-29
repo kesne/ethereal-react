@@ -1,6 +1,6 @@
 import { ethers, BigNumber } from "ethers";
-import { userAddressAtom } from "./accounts";
-import { createAsyncFamily } from "./utils/createAsyncFamily";
+import { createAsset } from "./utils/use-asset";
+import { useUserAddress } from "./accounts";
 
 interface GetERC20TokenBalance {
   /** The smart contract for the token. Should be an ERC20 or ERC721 contract. */
@@ -9,13 +9,17 @@ interface GetERC20TokenBalance {
   address?: string | null;
 }
 
+const tokenBalanceAsset = createAsset(
+  async (contract: ethers.Contract, address: string | null) => {
+    return (await contract.balanceOf(address)) as BigNumber;
+  }
+);
+
 /**
  * Gets the current token balance for a specified address, or the currently-connected wallet.
  * This should be used on ERC20 or ERC721 contracts.
  */
-export const useTokenBalance = createAsyncFamily(
-  async (params: GetERC20TokenBalance, get) => {
-    const address = params.address ?? get(userAddressAtom);
-    return (await params.contract.balanceOf(address)) as BigNumber;
-  }
-);
+export function useTokenBalance({ contract, address }: GetERC20TokenBalance) {
+  const userAddress = useUserAddress();
+  return tokenBalanceAsset.read(contract, address ?? userAddress);
+}

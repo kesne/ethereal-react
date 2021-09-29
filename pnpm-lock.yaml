@@ -6,7 +6,6 @@ specifiers:
   '@vitejs/plugin-react': ^1.0.1
   ethers: ^5.4.7
   fast-deep-equal: ^3.1.3
-  jotai: ^1.3.6
   microbundle: ^0.13.3
   react: ^0.0.0-experimental-b1a1cb116-20210924
   react-dom: ^0.0.0-experimental-b1a1cb116-20210924
@@ -17,7 +16,6 @@ specifiers:
 dependencies:
   ethers: 5.4.7
   fast-deep-equal: 3.1.3
-  jotai: 1.3.6_602eace79cfa0517f581e370eb52ecc9
   web3modal: 1.9.4
 
 devDependencies:
@@ -2653,43 +2651,6 @@ packages:
       merge-stream: 2.0.0
       supports-color: 7.2.0
     dev: true
-
-  /jotai/1.3.6_602eace79cfa0517f581e370eb52ecc9:
-    resolution: {integrity: sha512-ygZ2aVblQPSAgqWVrnuPjvVbByc4Rs2uwYLBBhyvmF8xMDrXQgS9Hstehawontk3ywUxDm6XBV8u1HemYdBnCA==}
-    engines: {node: '>=12'}
-    peerDependencies:
-      '@babel/core': '*'
-      '@babel/template': '*'
-      '@urql/core': '*'
-      immer: '*'
-      optics-ts: '*'
-      react: '>=16.8'
-      react-query: '*'
-      valtio: '*'
-      wonka: '*'
-      xstate: '*'
-    peerDependenciesMeta:
-      '@babel/core':
-        optional: true
-      '@babel/template':
-        optional: true
-      '@urql/core':
-        optional: true
-      immer:
-        optional: true
-      optics-ts:
-        optional: true
-      react-query:
-        optional: true
-      valtio:
-        optional: true
-      wonka:
-        optional: true
-      xstate:
-        optional: true
-    dependencies:
-      react: 0.0.0-experimental-b1a1cb116-20210924
-    dev: false
 
   /js-sha3/0.5.7:
     resolution: {integrity: sha1-DU/9gALVMzqrr0oj7tL2N0yfKOc=}

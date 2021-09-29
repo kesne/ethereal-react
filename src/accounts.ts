@@ -1,16 +1,34 @@
-import { atom } from "jotai";
-import { useAtomValue } from "jotai/utils";
-import { requiredProviderAtom } from "./provider";
+import { ethers } from "ethers";
+import { createAsset } from "./utils/use-asset";
+import { useProvider } from "./provider";
 
-export const userAddressAtom = atom(async (get) => {
-  const provider = get(requiredProviderAtom);
-  return provider.getSigner().getAddress();
-});
+const userAddressCache = createAsset(
+  async (provider: ethers.providers.Web3Provider) => {
+    return provider.getSigner().getAddress();
+  }
+);
 
-export function useUserAddress() {
-  return useAtomValue(userAddressAtom);
+export function useAddressOrDefault(address?: string) {
+  const provider = useProvider();
+  if (address) {
+    return address;
+  }
+  return userAddressCache.read(provider);
 }
 
-export function useBalance() {
+export function useUserAddress() {
+  const provider = useProvider();
+  return userAddressCache.read(provider);
+}
 
+const balanceAsset = createAsset(
+  async (provider: ethers.providers.Web3Provider, address: string) => {
+    return await provider.getBalance(address);
+  }
+);
+
+export function useBalance(address?: string) {
+  const provider = useProvider();
+  const userAddress = useAddressOrDefault(address);
+  return balanceAsset.read(provider, userAddress);
 }

@@ -15,7 +15,11 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
-    "noEmit": true
+    "noEmit": true,
+    "types": [
+      "react/experimental",
+      "react-dom/experimental"
+    ]
   },
   "include": ["./src/**/*"]
 }

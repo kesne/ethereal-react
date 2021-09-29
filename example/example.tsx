@@ -1,20 +1,19 @@
-/// <reference types="vite/client" />
-/// <reference types="react/experimental" />
-/// <reference types="react-dom/experimental" />
-
 import { StrictMode, Suspense, useState } from "react";
 import { createRoot } from "react-dom";
 import {
   useConnectToWallet,
-  ConnectedToWallet,
+  WalletProvider,
   useTokenBalance,
   useContract,
   ERC721_ABI,
   useWriteContract,
   useWaitForTransaction,
+  useBlock,
   useReadContract,
+  useBalance,
+  Contract,
+  ContractTransaction,
 } from "ethical-react";
-import { ethers } from "ethers";
 
 function ConnectButton() {
   const connect = useConnectToWallet();
@@ -26,8 +25,8 @@ function Minted({
   contract,
   tokenId,
 }: {
-  transaction: ethers.ContractTransaction;
-  contract: ethers.Contract;
+  transaction: ContractTransaction;
+  contract: Contract;
   tokenId: number;
 }) {
   const confirmation = useWaitForTransaction({ transaction });
@@ -46,7 +45,7 @@ function Minted({
   );
 }
 
-function Minter({ contract }: { contract: ethers.Contract }) {
+function Minter({ contract }: { contract: Contract }) {
   const [id, setId] = useState("");
   const [claimTechStack, { loading, data }] = useWriteContract({
     contract,
@@ -78,6 +77,8 @@ function Minter({ contract }: { contract: ethers.Contract }) {
 }
 
 function App() {
+  const block = useBlock();
+  const balance = useBalance();
   const TechStack = useContract({
     // PROD:
     // address: "0x6A63Bb17c831555783b46C6B344237E80372C97F",
@@ -94,6 +95,8 @@ function App() {
 
   return (
     <div>
+      <div>Block number: {block.number}</div>
+      <div>Balance: {balance.toString()}</div>
       Current TechStack: {stack.toString()}
       <Minter contract={TechStack} />
     </div>
@@ -107,9 +110,9 @@ if (!globalThis.reactRoot) {
 globalThis.reactRoot.render(
   <StrictMode>
     <Suspense fallback="Loading...">
-      <ConnectedToWallet fallback={<ConnectButton />}>
+      <WalletProvider fallback={<ConnectButton />}>
         <App />
-      </ConnectedToWallet>
+      </WalletProvider>
     </Suspense>
   </StrictMode>
 );
