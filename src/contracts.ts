@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import { useCallback, useReducer } from "react";
-import { createAsset } from "use-asset";
+import { createAsset } from "./utils/use-asset";
 import { useProvider } from "./provider";
 
 interface Contract {

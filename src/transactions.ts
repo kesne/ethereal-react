@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { createAsset } from "use-asset";
+import { createAsset } from "./utils/use-asset";
 
 interface WaitForTransaction {
   transaction: ethers.ContractTransaction;

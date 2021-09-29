@@ -1,5 +1,5 @@
 import { ethers, BigNumber } from "ethers";
-import { createAsset } from "use-asset";
+import { createAsset } from "./utils/use-asset";
 import { useUserAddress } from "./accounts";
 
 interface GetERC20TokenBalance {
