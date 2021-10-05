@@ -1,9 +1,9 @@
 import { useEffect, useTransition } from "react";
-import { ethers } from "ethers";
-import { useProvider } from "./provider";
+import { Listener } from "@ethersproject/providers";
+import { useProvider, EthicalProvider } from "./provider";
 import { createAsset, useAsset } from "./utils/use-asset";
 
-export function useOnBlock(listener: ethers.providers.Listener): void {
+export function useOnBlock(listener: Listener): void {
   const provider = useProvider();
 
   useEffect(() => {
@@ -14,11 +14,9 @@ export function useOnBlock(listener: ethers.providers.Listener): void {
   }, [provider]);
 }
 
-const blockAsset = createAsset(
-  async (provider: ethers.providers.Web3Provider) => {
-    return provider.getBlock(await provider.getBlockNumber());
-  }
-);
+const blockAsset = createAsset(async (provider: EthicalProvider) => {
+  return provider.getBlock(await provider.getBlockNumber());
+});
 
 function useSafeTransition() {
   if (useTransition) {
@@ -28,12 +26,10 @@ function useSafeTransition() {
   return [false, (cb: () => void) => cb()] as const;
 }
 
-// TODO: Probably tuple this because it automatically fetches new blocks under a
-// transition, so it may be desirable for the UI to react to the `isInFlight`.
 export function useBlock() {
   const provider = useProvider();
   const [block, refresh] = useAsset(blockAsset, provider);
-  const [_isInFlight, startTransition] = useSafeTransition();
+  const [isInFlight, startTransition] = useSafeTransition();
 
   useOnBlock(() => {
     // NOTE: We run this inside of a transition so that the previous UI can still
@@ -43,5 +39,5 @@ export function useBlock() {
     });
   });
 
-  return block;
+  return [block, isInFlight] as const;
 }

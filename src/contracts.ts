@@ -1,17 +1,13 @@
-import { ethers } from "ethers";
-import { useCallback, useReducer } from "react";
+import { Contract, ContractInterface } from "@ethersproject/contracts";
+import { useCallback, useEffect, useReducer } from "react";
 import { createAsset } from "./utils/use-asset";
-import { useProvider } from "./provider";
-
-interface Contract {
-  address: string;
-  abi: ethers.ContractInterface;
-}
+import { EthicalProvider, useProvider } from "./provider";
 
 const contractAsset = createAsset(
   async (
-    provider: ethers.providers.Web3Provider,
-    { address, abi }: Contract
+    provider: EthicalProvider,
+    address: string,
+    abi: ContractInterface
   ) => {
     // we need to check to see if this provider has a signer or not
     let signer;
@@ -22,32 +18,27 @@ const contractAsset = createAsset(
       signer = provider;
     }
 
-    return new ethers.Contract(address, abi, signer);
+    return new Contract(address, abi, signer);
   }
 );
 
-export function useContract(contract: Contract) {
+export function useContract(address: string, abi: ContractInterface) {
   const provider = useProvider();
-  return contractAsset.read(provider, contract);
+  return contractAsset.read(provider, address, abi);
 }
 
-interface ReadContract {
-  contract: ethers.Contract;
-  function: string;
-  args: any[];
-}
+const readContractAsset = createAsset(
+  async (contract: Contract, functionName: string, args: any[]) => {
+    return contract[functionName](...args);
+  }
+);
 
-const readContractAsset = createAsset(async (contractRead: ReadContract) => {
-  return contractRead.contract[contractRead.function](...contractRead.args);
-});
-
-export function useReadContract(contractRead: ReadContract) {
-  return readContractAsset.read(contractRead);
-}
-
-interface WriteContract {
-  contract: ethers.Contract;
-  function: string;
+export function useReadContract(
+  contract: Contract,
+  functionName: string,
+  args: any[]
+) {
+  return readContractAsset.read(contract, functionName, args);
 }
 
 interface WriteContractState<TData = any> {
@@ -61,57 +52,63 @@ type WriteContractHook<TArgs extends any[] = any[], TData = any> = [
   state: WriteContractState<TData>
 ];
 
-type Actions<TData = any> =
-  | {
-      type: "loading";
-    }
-  | {
-      type: "success";
-      payload: TData;
-    }
-  | {
-      type: "error";
-      payload: Error;
-    };
+interface Actions<TData = any> {
+  type: "loading" | "success" | "error" | "reset";
+  payload?: TData;
+  error?: Error;
+}
+
+const INITIAL_WRITE_STATE = {
+  loading: false,
+  data: null,
+  error: null,
+};
 
 export function useWriteContract<TArgs extends any[] = any[], TData = any>(
-  writeContract: WriteContract
+  contract: Contract,
+  functionName: string
 ): WriteContractHook<TArgs, TData> {
   const [state, dispatch] = useReducer(
-    (_state: WriteContractState<TData>, action: Actions<TData>) => {
+    (
+      _state: WriteContractState<TData>,
+      action: Actions<TData>
+    ): WriteContractState<TData> => {
       switch (action.type) {
+        case "reset":
+          return INITIAL_WRITE_STATE;
         case "loading":
           return { loading: true, data: null, error: null };
         case "error":
-          return { loading: false, data: null, error: action.payload };
+          return { loading: false, data: null, error: action.error! };
         case "success":
-          return { loading: false, data: action.payload, error: null };
+          return { loading: false, data: action.payload!, error: null };
         default:
           throw new Error(`Unknown action: ${action}`);
       }
     },
-    {
-      loading: false,
-      data: null,
-      error: null,
-    }
+    INITIAL_WRITE_STATE
   );
+
+  // If you provide a new contract or functionName, then we need to reset the state:
+  useEffect(() => {
+    return () => {
+      dispatch({ type: "reset" });
+    };
+  }, [contract, functionName]);
 
   const write = useCallback(
     async (...args: TArgs) => {
       dispatch({ type: "loading" });
       try {
-        const result = await writeContract.contract[writeContract.function](
-          ...args
-        );
+        const result = await contract[functionName](...args);
         dispatch({ type: "success", payload: result });
         return result as TData;
       } catch (e) {
-        dispatch({ type: "error", payload: e as Error });
+        dispatch({ type: "error", error: e as Error });
         throw e;
       }
     },
-    [writeContract.contract, writeContract.function]
+    [contract, functionName]
   );
 
   return [write, state];

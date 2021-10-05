@@ -1,4 +1,4 @@
-import { ethers } from "ethers";
+import { Web3Provider } from "@ethersproject/providers";
 import {
   createContext,
   ReactNode,
@@ -9,11 +9,11 @@ import {
   useState,
 } from "react";
 import Web3Modal from "web3modal";
-import { Provider } from "./provider";
+import { EthicalProvider, Provider } from "./provider";
 
 const Web3ModalContext = createContext<{
   web3Modal: Web3Modal;
-  setProvider(provider: ethers.providers.Web3Provider): void;
+  setProvider(provider: EthicalProvider): void;
 } | null>(null);
 
 interface WalletProviderProps {
@@ -27,8 +27,7 @@ export function WalletProvider({
   fallback,
   children,
 }: WalletProviderProps) {
-  const [provider, setProvider] =
-    useState<ethers.providers.Web3Provider | null>(null);
+  const [provider, setProvider] = useState<EthicalProvider | null>(null);
 
   const web3ModalContextValue = useMemo(
     () => ({
@@ -43,7 +42,7 @@ export function WalletProvider({
   useEffect(() => {
     if (web3Modal.cachedProvider) {
       web3Modal.connect().then((provider) => {
-        setProvider(new ethers.providers.Web3Provider(provider));
+        setProvider(new Web3Provider(provider));
       });
     }
   }, [web3Modal]);
@@ -76,7 +75,7 @@ export function useConnectToWallet() {
 
   return useCallback(() => {
     web3Modal.connect().then((provider) => {
-      setProvider(new ethers.providers.Web3Provider(provider));
+      setProvider(new Web3Provider(provider));
     });
   }, [web3Modal]);
 }

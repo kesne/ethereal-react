@@ -30,11 +30,7 @@ function Minted({
   tokenId: number;
 }) {
   const confirmation = useWaitForTransaction({ transaction });
-  const tokenURI = useReadContract({
-    contract,
-    function: "tokenURI",
-    args: [tokenId],
-  });
+  const tokenURI = useReadContract(contract, "tokenURI", [tokenId]);
 
   return (
     <div>
@@ -47,10 +43,7 @@ function Minted({
 
 function Minter({ contract }: { contract: Contract }) {
   const [id, setId] = useState("");
-  const [claimTechStack, { loading, data }] = useWriteContract({
-    contract,
-    function: "claim",
-  });
+  const [claimTechStack, { loading, data }] = useWriteContract(contract, "claim");
 
   if (data) {
     return (
@@ -77,27 +70,23 @@ function Minter({ contract }: { contract: Contract }) {
 }
 
 function App() {
-  const block = useBlock();
+  const [block] = useBlock();
   const balance = useBalance();
-  const TechStack = useContract({
+  const TechStack = useContract(
     // PROD:
-    // address: "0x6A63Bb17c831555783b46C6B344237E80372C97F",
+    // "0x6A63Bb17c831555783b46C6B344237E80372C97F",
     // ROPSTEN:
-    address: "0x2A4eEfd9679aB26c5FD70D8A5982025dC6Ca6EC2",
-    abi: [
-      ...ERC721_ABI,
-      "function claim(uint256 tokenId)",
-      "function tokenURI(uint256 tokenId) view returns (string memory)",
-    ],
-  });
+    "0x2A4eEfd9679aB26c5FD70D8A5982025dC6Ca6EC2",
+    [...ERC721_ABI, "function claim(uint256 tokenId)"],
+  );
 
-  const stack = useTokenBalance({ contract: TechStack });
+  const stack = useTokenBalance(TechStack);
 
   return (
     <div>
       <div>Block number: {block.number}</div>
       <div>Balance: {balance.toString()}</div>
-      Current TechStack: {stack.toString()}
+      <div>Current TechStack: {stack.toString()}</div>
       <Minter contract={TechStack} />
     </div>
   );

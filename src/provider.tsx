@@ -1,18 +1,13 @@
-import { ethers } from "ethers";
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useMemo,
-} from "react";
+import type { Web3Provider, JsonRpcProvider } from "@ethersproject/providers";
+import { createContext, ReactNode, useContext, useMemo } from "react";
 
-const ProvidersContext = createContext<
-  Record<string, ethers.providers.Web3Provider>
->({});
+export type EthicalProvider = Web3Provider | JsonRpcProvider;
+
+const ProvidersContext = createContext<Record<string, EthicalProvider>>({});
 
 interface ProviderProps {
   name?: string;
-  provider: ethers.providers.Web3Provider;
+  provider: EthicalProvider;
   children: ReactNode;
 }
 

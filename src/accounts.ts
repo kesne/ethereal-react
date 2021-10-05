@@ -1,9 +1,8 @@
-import { ethers } from "ethers";
 import { createAsset } from "./utils/use-asset";
-import { useProvider } from "./provider";
+import { useProvider, EthicalProvider } from "./provider";
 
 const userAddressCache = createAsset(
-  async (provider: ethers.providers.Web3Provider) => {
+  async (provider: EthicalProvider) => {
     return provider.getSigner().getAddress();
   }
 );
@@ -22,7 +21,7 @@ export function useUserAddress() {
 }
 
 const balanceAsset = createAsset(
-  async (provider: ethers.providers.Web3Provider, address: string) => {
+  async (provider: EthicalProvider, address: string) => {
     return await provider.getBalance(address);
   }
 );

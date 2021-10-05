@@ -1,8 +1,8 @@
-import { ethers } from "ethers";
+import { ContractTransaction } from '@ethersproject/contracts';
 import { createAsset } from "./utils/use-asset";
 
 interface WaitForTransaction {
-  transaction: ethers.ContractTransaction;
+  transaction: ContractTransaction;
   /** The number of confirmations to wait for. Defaults to 1. */
   confirmations?: number;
 }

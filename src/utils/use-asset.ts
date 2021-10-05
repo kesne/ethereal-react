@@ -95,7 +95,6 @@ export function createAsset<Response, Args extends any[]>(
       handleAsset(fn, cache, args, lifespan) as Response,
     preload: (...args: Args): void =>
       void handleAsset(fn, cache, args, lifespan, true),
-    // update: (...args: Args) => ,
     clear: (...args: Args) => clear(cache, ...args),
     peek: (...args: Args): void | Response =>
       cache.find((entry) => deepEqual(args, entry.args))?.response,
