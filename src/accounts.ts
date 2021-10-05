@@ -1,8 +1,8 @@
 import { createAsset } from "./utils/use-asset";
-import { useProvider, EthicalProvider } from "./provider";
+import { useProvider, EtherealProvider } from "./provider";
 
 const userAddressCache = createAsset(
-  async (provider: EthicalProvider) => {
+  async (provider: EtherealProvider) => {
     return provider.getSigner().getAddress();
   }
 );
@@ -21,7 +21,7 @@ export function useUserAddress() {
 }
 
 const balanceAsset = createAsset(
-  async (provider: EthicalProvider, address: string) => {
+  async (provider: EtherealProvider, address: string) => {
     return await provider.getBalance(address);
   }
 );

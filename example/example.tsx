@@ -15,7 +15,7 @@ import {
   Contract,
   ContractTransaction,
   useLogout,
-} from "ethical-react";
+} from "ethereal-react";
 // @ts-ignore: This package does not have types.
 import WalletConnectProvider from "@walletconnect/web3-provider";
 

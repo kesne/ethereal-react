@@ -9,11 +9,11 @@ import {
   useState,
 } from "react";
 import Web3Modal, { ICoreOptions } from "web3modal";
-import { EthicalProvider, Provider, ProvidersContext } from "./provider";
+import { EtherealProvider, Provider } from "./provider";
 
 const Web3ModalContext = createContext<{
   web3Modal: Web3Modal;
-  setProvider(provider: EthicalProvider | null): void;
+  setProvider(provider: EtherealProvider | null): void;
 } | null>(null);
 
 interface WalletProviderProps extends Partial<ICoreOptions> {
@@ -46,7 +46,7 @@ export function WalletProvider({
   web3Modal: providedWeb3Modal,
   ...web3ModalOptions
 }: WalletProviderProps) {
-  const [provider, setProvider] = useState<EthicalProvider | null>(null);
+  const [provider, setProvider] = useState<EtherealProvider | null>(null);
 
   const web3Modal = useMemo(() => {
     if (providedWeb3Modal) return providedWeb3Modal;

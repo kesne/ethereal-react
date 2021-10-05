@@ -1,6 +1,6 @@
 import { useEffect, useTransition } from "react";
 import { Listener } from "@ethersproject/providers";
-import { useProvider, EthicalProvider } from "./provider";
+import { useProvider, EtherealProvider } from "./provider";
 import { createAsset, useAsset } from "./utils/use-asset";
 
 export function useOnBlock(listener: Listener): void {
@@ -14,7 +14,7 @@ export function useOnBlock(listener: Listener): void {
   }, [provider]);
 }
 
-const blockAsset = createAsset(async (provider: EthicalProvider) => {
+const blockAsset = createAsset(async (provider: EtherealProvider) => {
   return provider.getBlock(await provider.getBlockNumber());
 });
 

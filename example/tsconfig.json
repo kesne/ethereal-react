@@ -3,7 +3,7 @@
 	"compilerOptions": {
 		"jsx": "react-jsx",
 		"paths": {
-			"ethical-react": ["../src"]
+			"ethereal-react": ["../src"]
 		},
 		"types": [
 			"react/experimental",

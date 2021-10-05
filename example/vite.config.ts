@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      "ethical-react": "../src",
+      "ethereal-react": "../src",
     },
   },
   define: {

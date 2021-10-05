@@ -1,11 +1,11 @@
 import { Contract, ContractInterface } from "@ethersproject/contracts";
 import { useCallback, useEffect, useReducer } from "react";
 import { createAsset } from "./utils/use-asset";
-import { EthicalProvider, useProvider } from "./provider";
+import { EtherealProvider, useProvider } from "./provider";
 
 const contractAsset = createAsset(
   async (
-    provider: EthicalProvider,
+    provider: EtherealProvider,
     address: string,
     abi: ContractInterface
   ) => {

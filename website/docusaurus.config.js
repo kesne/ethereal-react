@@ -7,15 +7,15 @@ const pkg = require('../package.json');
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 (
   module.exports = {
-    title: "Ethical React",
+    title: "Ethereal React",
     tagline: "TODO: Tagline",
-    url: "https://kesne.github.io/ethical-react/",
+    url: "https://kesne.github.io/ethereal-react/",
     baseUrl: "/",
     onBrokenLinks: "throw",
     onBrokenMarkdownLinks: "warn",
     favicon: "img/favicon.ico",
     organizationName: "kesne",
-    projectName: "ethical-react",
+    projectName: "ethereal-react",
 
     plugins: [
       [
@@ -36,7 +36,7 @@ const pkg = require('../package.json');
           docs: {
             sidebarPath: require.resolve("./sidebars.js"),
             editUrl:
-              "https://github.com/kesne/ethical-react/edit/main/website/",
+              "https://github.com/kesne/ethereal-react/edit/main/website/",
           },
           theme: {
             customCss: require.resolve("./src/css/custom.css"),
@@ -49,9 +49,9 @@ const pkg = require('../package.json');
       /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
       ({
         navbar: {
-          title: "Ethical React",
+          title: "Ethereal React",
           logo: {
-            alt: "Ethical React Logo",
+            alt: "Ethereal React Logo",
             src: "img/logo.svg",
           },
           items: [
