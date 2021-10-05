@@ -3,7 +3,7 @@ import { createContext, ReactNode, useContext, useMemo } from "react";
 
 export type EthicalProvider = Web3Provider | JsonRpcProvider;
 
-const ProvidersContext = createContext<Record<string, EthicalProvider>>({});
+export const ProvidersContext = createContext<Record<string, EthicalProvider>>({});
 
 interface ProviderProps {
   name?: string;

@@ -58,7 +58,6 @@ export const ERC721_METADATA_ABI = Object.freeze([
  * This ABI includes common extensions for metadata, and enumerability.
  */
 export const ERC721_ABI = Object.freeze([
-  ...ERC165_ABI,
   ...ERC721_BASE_ABI,
   ...ERC721_ENUMERABLE_ABI,
   ...ERC721_METADATA_ABI,

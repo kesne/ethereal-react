@@ -9,4 +9,7 @@ export default defineConfig({
       "ethical-react": "../src",
     },
   },
+  define: {
+    'global': 'globalThis',
+  }
 });

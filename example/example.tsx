@@ -1,3 +1,4 @@
+import "./polyfill";
 import { StrictMode, Suspense, useState } from "react";
 import { createRoot } from "react-dom";
 import {
@@ -13,7 +14,10 @@ import {
   useBalance,
   Contract,
   ContractTransaction,
+  useLogout,
 } from "ethical-react";
+// @ts-ignore: This package does not have types.
+import WalletConnectProvider from "@walletconnect/web3-provider";
 
 function ConnectButton() {
   const connect = useConnectToWallet();
@@ -43,7 +47,10 @@ function Minted({
 
 function Minter({ contract }: { contract: Contract }) {
   const [id, setId] = useState("");
-  const [claimTechStack, { loading, data }] = useWriteContract(contract, "claim");
+  const [claimTechStack, { loading, data }] = useWriteContract(
+    contract,
+    "claim"
+  );
 
   if (data) {
     return (
@@ -70,6 +77,7 @@ function Minter({ contract }: { contract: Contract }) {
 }
 
 function App() {
+  const logout = useLogout();
   const [block] = useBlock();
   const balance = useBalance();
   const TechStack = useContract(
@@ -77,7 +85,7 @@ function App() {
     // "0x6A63Bb17c831555783b46C6B344237E80372C97F",
     // ROPSTEN:
     "0x2A4eEfd9679aB26c5FD70D8A5982025dC6Ca6EC2",
-    [...ERC721_ABI, "function claim(uint256 tokenId)"],
+    [...ERC721_ABI, "function claim(uint256 tokenId)"]
   );
 
   const stack = useTokenBalance(TechStack);
@@ -88,6 +96,7 @@ function App() {
       <div>Balance: {balance.toString()}</div>
       <div>Current TechStack: {stack.toString()}</div>
       <Minter contract={TechStack} />
+      <button onClick={logout}>Logout</button>
     </div>
   );
 }
@@ -99,7 +108,18 @@ if (!globalThis.reactRoot) {
 globalThis.reactRoot.render(
   <StrictMode>
     <Suspense fallback="Loading...">
-      <WalletProvider fallback={<ConnectButton />}>
+      <WalletProvider
+        network="ropsten"
+        providerOptions={{
+          walletconnect: {
+            package: WalletConnectProvider,
+            options: {
+              infuraId: import.meta.env.VITE_INFURA_ID,
+            },
+          },
+        }}
+        fallback={<ConnectButton />}
+      >
         <App />
       </WalletProvider>
     </Suspense>
