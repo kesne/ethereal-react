@@ -6,6 +6,7 @@ export { useTokenBalance } from "./tokens";
 export { ERC20_ABI, ERC165_ABI, ERC721_ABI } from "./abi";
 export { useBlock, useOnBlock } from "./blocks";
 export { useWaitForTransaction } from "./transactions";
+export { useENSForAddress, useResolveENS } from "./ens";
 
 // Re-export types from Ethers that are used frequently:
 // TODO: Figure out if this is what we want to do long term, or if we're just fine
