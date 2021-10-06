@@ -109,6 +109,7 @@ globalThis.reactRoot.render(
   <StrictMode>
     <Suspense fallback="Loading...">
       <WalletProvider
+        cacheProvider
         network="ropsten"
         providerOptions={{
           walletconnect: {

@@ -1,13 +1,23 @@
-import { Contract, ContractInterface } from "@ethersproject/contracts";
+import {
+  Contract,
+  ContractInterface,
+  ContractTransaction,
+} from "@ethersproject/contracts";
 import { useCallback, useEffect, useReducer } from "react";
 import { createAsset } from "./utils/use-asset";
 import { EtherealProvider, useProvider } from "./provider";
+import {
+  Awaited,
+  ContractFactory,
+  ContractFunctions,
+  ContractInstance,
+} from "./types";
 
 const contractAsset = createAsset(
   async (
     provider: EtherealProvider,
     address: string,
-    abi: ContractInterface
+    typechainFactoryOrABI: ContractFactory<any> | ContractInterface
   ) => {
     // we need to check to see if this provider has a signer or not
     let signer;
@@ -18,61 +28,69 @@ const contractAsset = createAsset(
       signer = provider;
     }
 
-    return new Contract(address, abi, signer);
+    // Typechain factory:
+    if (
+      typeof typechainFactoryOrABI === "object" &&
+      "connect" in typechainFactoryOrABI
+    ) {
+      return typechainFactoryOrABI.connect(address, signer);
+    }
+
+    // ABI:
+    return new Contract(address, typechainFactoryOrABI, signer);
   }
 );
 
-export function useContract(address: string, abi: ContractInterface) {
+export function useContract<T extends ContractInstance = Contract>(
+  address: string,
+  typechainFactoryOrABI: ContractInterface | ContractFactory<T>
+): T {
   const provider = useProvider();
-  return contractAsset.read(provider, address, abi);
+
+  return contractAsset.read(provider, address, typechainFactoryOrABI);
 }
 
 const readContractAsset = createAsset(
-  async (contract: Contract, functionName: string, args: any[]) => {
+  async (contract: Contract, functionName: string, args: any[] = []) => {
     return contract[functionName](...args);
   }
 );
 
-export function useReadContract(
-  contract: Contract,
-  functionName: string,
-  args: any[]
-) {
-  return readContractAsset.read(contract, functionName, args);
+export function useReadContract<
+  TContract extends ContractInstance = any,
+  TFunctionName extends string & keyof ContractFunctions<TContract> = string
+>(
+  contract: TContract | Contract,
+  functionName: TFunctionName,
+  ...args: Parameters<ContractFunctions<TContract>[TFunctionName]>
+): Awaited<ReturnType<ContractFunctions<TContract>[TFunctionName]>> {
+  return readContractAsset.read(contract as Contract, functionName, args);
 }
 
-interface WriteContractState<TData = any> {
-  loading: boolean;
-  data: TData | null;
-  error: Error | null;
-}
-
-type WriteContractHook<TArgs extends any[] = any[], TData = any> = [
-  write: (...args: TArgs) => Promise<TData>,
-  state: WriteContractState<TData>
-];
-
-interface Actions<TData = any> {
+interface Actions {
   type: "loading" | "success" | "error" | "reset";
-  payload?: TData;
+  payload?: ContractTransaction;
   error?: Error;
 }
 
-const INITIAL_WRITE_STATE = {
+interface WriteContractState {
+  loading: boolean;
+  data: ContractTransaction | null;
+  error: Error | null;
+}
+
+const INITIAL_WRITE_STATE: WriteContractState = {
   loading: false,
   data: null,
   error: null,
 };
 
-export function useWriteContract<TArgs extends any[] = any[], TData = any>(
-  contract: Contract,
-  functionName: string
-): WriteContractHook<TArgs, TData> {
+export function useWriteContract<
+  TContract extends ContractInstance = any,
+  TFunctionName extends string & keyof ContractFunctions<TContract> = string
+>(contract: TContract | Contract, functionName: TFunctionName) {
   const [state, dispatch] = useReducer(
-    (
-      _state: WriteContractState<TData>,
-      action: Actions<TData>
-    ): WriteContractState<TData> => {
+    (_state: WriteContractState, action: Actions): WriteContractState => {
       switch (action.type) {
         case "reset":
           return INITIAL_WRITE_STATE;
@@ -97,12 +115,14 @@ export function useWriteContract<TArgs extends any[] = any[], TData = any>(
   }, [contract, functionName]);
 
   const write = useCallback(
-    async (...args: TArgs) => {
+    async (
+      ...args: Parameters<ContractFunctions<TContract>[TFunctionName]>
+    ) => {
       dispatch({ type: "loading" });
       try {
-        const result = await contract[functionName](...args);
+        const result = await (contract as Contract)[functionName](...args);
         dispatch({ type: "success", payload: result });
-        return result as TData;
+        return result as ContractTransaction;
       } catch (e) {
         dispatch({ type: "error", error: e as Error });
         throw e;
@@ -111,5 +131,5 @@ export function useWriteContract<TArgs extends any[] = any[], TData = any>(
     [contract, functionName]
   );
 
-  return [write, state];
+  return [write, state] as const;
 }
