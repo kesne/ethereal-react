@@ -9,6 +9,7 @@ const tokenBalanceAsset = createAsset(
   }
 );
 
+// TODO: If the contract is a typechain contract, then enforce that it has a `balanceOf` method.
 /**
  * Gets the current token balance for a specified address, or the currently-connected wallet.
  * This should be used on ERC20 or ERC721 contracts.

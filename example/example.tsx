@@ -34,7 +34,7 @@ function Minted({
   tokenId: number;
 }) {
   const confirmation = useWaitForTransaction({ transaction });
-  const tokenURI = useReadContract(contract, "tokenURI", [tokenId]);
+  const tokenURI = useReadContract(contract, "tokenURI", tokenId);
 
   return (
     <div>
@@ -109,6 +109,7 @@ globalThis.reactRoot.render(
   <StrictMode>
     <Suspense fallback="Loading...">
       <WalletProvider
+        cacheProvider
         network="ropsten"
         providerOptions={{
           walletconnect: {
