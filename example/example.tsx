@@ -34,7 +34,7 @@ function Minted({
   tokenId: number;
 }) {
   const confirmation = useWaitForTransaction({ transaction });
-  const tokenURI = useReadContract(contract, "tokenURI", [tokenId]);
+  const tokenURI = useReadContract(contract, "tokenURI", tokenId);
 
   return (
     <div>
