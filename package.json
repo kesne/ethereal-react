@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {},
-  "dependencies": {
+  "devDependencies": {
+    "@changesets/cli": "^2.17.0",
     "typescript": "^4.4.3"
-  },
-  "devDependencies": {}
+  }
 }
