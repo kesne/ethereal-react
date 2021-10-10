@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "ethereal-react": ["../ethereal-react/src"]
+    },
+    "types": ["react/experimental", "react-dom/experimental", "vite/client"]
+  }
+}
