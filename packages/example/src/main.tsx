@@ -20,8 +20,13 @@ import {
 import WalletConnectProvider from "@walletconnect/web3-provider";
 
 function ConnectButton() {
-  const connect = useConnectToWallet();
-  return <button onClick={connect}>Connect to Wallet</button>;
+  const [connect, { loading }] = useConnectToWallet();
+
+  return (
+    <button onClick={connect} disabled={loading}>
+      Connect to Wallet
+    </button>
+  );
 }
 
 function Minted({

@@ -3,7 +3,6 @@ import {
   ContractInterface,
   ContractTransaction,
 } from "@ethersproject/contracts";
-import { useCallback, useEffect, useReducer } from "react";
 import { createAsset } from "./utils/use-asset";
 import { EtherealProvider, useProvider } from "./provider";
 import {
@@ -12,6 +11,7 @@ import {
   ContractFunctions,
   ContractInstance,
 } from "./types";
+import { useMutation } from "./utils/use-mutation";
 
 const contractAsset = createAsset(
   async (
@@ -67,69 +67,18 @@ export function useReadContract<
   return readContractAsset.read(contract as Contract, functionName, args);
 }
 
-interface Actions {
-  type: "loading" | "success" | "error" | "reset";
-  payload?: ContractTransaction;
-  error?: Error;
-}
-
-interface WriteContractState {
-  loading: boolean;
-  data: ContractTransaction | null;
-  error: Error | null;
-}
-
-const INITIAL_WRITE_STATE: WriteContractState = {
-  loading: false,
-  data: null,
-  error: null,
-};
-
 export function useWriteContract<
   TContract extends ContractInstance = any,
   TFunctionName extends string & keyof ContractFunctions<TContract> = string
 >(contract: TContract | Contract, functionName: TFunctionName) {
-  const [state, dispatch] = useReducer(
-    (_state: WriteContractState, action: Actions): WriteContractState => {
-      switch (action.type) {
-        case "reset":
-          return INITIAL_WRITE_STATE;
-        case "loading":
-          return { loading: true, data: null, error: null };
-        case "error":
-          return { loading: false, data: null, error: action.error! };
-        case "success":
-          return { loading: false, data: action.payload!, error: null };
-        default:
-          throw new Error(`Unknown action: ${action}`);
-      }
-    },
-    INITIAL_WRITE_STATE
-  );
-
-  // If you provide a new contract or functionName, then we need to reset the state:
-  useEffect(() => {
-    return () => {
-      dispatch({ type: "reset" });
-    };
-  }, [contract, functionName]);
-
-  const write = useCallback(
+  return useMutation(
     async (
       ...args: Parameters<ContractFunctions<TContract>[TFunctionName]>
     ) => {
-      dispatch({ type: "loading" });
-      try {
-        const result = await (contract as Contract)[functionName](...args);
-        dispatch({ type: "success", payload: result });
-        return result as ContractTransaction;
-      } catch (e) {
-        dispatch({ type: "error", error: e as Error });
-        throw e;
-      }
+      return (await (contract as Contract)[functionName](
+        ...args
+      )) as ContractTransaction;
     },
     [contract, functionName]
   );
-
-  return [write, state] as const;
 }

@@ -10,6 +10,7 @@ import {
 } from "react";
 import Web3Modal, { ICoreOptions } from "web3modal";
 import { EtherealProvider, Provider } from "./provider";
+import { useMutation } from "./utils/use-mutation";
 
 const Web3ModalContext = createContext<{
   web3Modal: Web3Modal;
@@ -39,13 +40,14 @@ export function useLogout() {
   };
 }
 
-export function WalletProvider({
-  name = "default",
-  fallback,
-  children,
-  web3Modal: providedWeb3Modal,
-  ...web3ModalOptions
-}: WalletProviderProps) {
+export function WalletProvider(props: WalletProviderProps) {
+  const {
+    name = "default",
+    fallback,
+    children,
+    web3Modal: providedWeb3Modal,
+    ...web3ModalOptions
+  } = props;
   const [provider, setProvider] = useState<EtherealProvider | null>(null);
 
   const web3Modal = useMemo(() => {
@@ -87,8 +89,8 @@ export function useConnectToWallet() {
 
   const { web3Modal, setProvider } = web3ModalContext;
 
-  return useCallback(() => {
-    web3Modal.connect().then((provider) => {
+  return useMutation(async () => {
+    return web3Modal.connect().then((provider) => {
       setProvider(new Web3Provider(provider));
     });
   }, [web3Modal]);

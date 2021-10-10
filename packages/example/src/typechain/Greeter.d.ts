@@ -23,16 +23,19 @@ interface GreeterInterface extends ethers.utils.Interface {
   functions: {
     "greet()": FunctionFragment;
     "setGreeting(string)": FunctionFragment;
+    "balanceOf(address)": FunctionFragment;
   };
 
   encodeFunctionData(functionFragment: "greet", values?: undefined): string;
   encodeFunctionData(functionFragment: "setGreeting", values: [string]): string;
+  encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
 
   decodeFunctionResult(functionFragment: "greet", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setGreeting",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
 
   events: {};
 }
@@ -87,6 +90,8 @@ export class Greeter extends BaseContract {
       _greeting: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    balanceOf(address: string, overrides?: CallOverrides): Promise<[BigNumber]>;
   };
 
   greet(overrides?: CallOverrides): Promise<string>;
@@ -96,10 +101,14 @@ export class Greeter extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  balanceOf(address: string, overrides?: CallOverrides): Promise<BigNumber>;
+
   callStatic: {
     greet(overrides?: CallOverrides): Promise<string>;
 
     setGreeting(_greeting: string, overrides?: CallOverrides): Promise<void>;
+
+    balanceOf(address: string, overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   filters: {};
@@ -111,6 +120,8 @@ export class Greeter extends BaseContract {
       _greeting: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    balanceOf(address: string, overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -119,6 +130,11 @@ export class Greeter extends BaseContract {
     setGreeting(
       _greeting: string,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    balanceOf(
+      address: string,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };
 }

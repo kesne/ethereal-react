@@ -1,9 +1,9 @@
 {
-  "name": "ethereal-example",
+  "name": "example",
   "private": true,
   "scripts": {
     "start": "vite",
-    "typechain": "typechain --target=ethers-v5 './example/abi/*.json' --out-dir ./example/typechain"
+    "typechain": "typechain --target=ethers-v5 './src/abi/*.json' --out-dir ./src/typechain"
   },
   "dependencies": {
     "vite-tsconfig-paths": "^3.3.15"

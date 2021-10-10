@@ -13,11 +13,8 @@ interface ProviderProps {
   children: ReactNode;
 }
 
-export function Provider({
-  name = "default",
-  provider,
-  children,
-}: ProviderProps) {
+export function Provider(props: ProviderProps) {
+  const { name = "default", provider, children } = props;
   const providers = useContext(ProvidersContext);
   const newContext = useMemo(
     () => ({

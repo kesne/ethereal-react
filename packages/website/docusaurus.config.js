@@ -1,7 +1,7 @@
 const path = require("path");
 const lightCodeTheme = require("prism-react-renderer/themes/github");
 const darkCodeTheme = require("prism-react-renderer/themes/dracula");
-const pkg = require('../package.json');
+const pkg = require('../ethereal-react/package.json');
 
 // With JSDoc @type annotations, IDEs can provide config autocompletion
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
@@ -9,8 +9,8 @@ const pkg = require('../package.json');
   module.exports = {
     title: "Ethereal React",
     tagline: "TODO: Tagline",
-    url: "https://kesne.github.io/ethereal-react/",
-    baseUrl: "/",
+    url: "https://kesne.github.io/",
+    baseUrl: "/ethereal-react/",
     onBrokenLinks: "throw",
     onBrokenMarkdownLinks: "warn",
     favicon: "img/favicon.ico",
@@ -18,14 +18,14 @@ const pkg = require('../package.json');
     projectName: "ethereal-react",
 
     plugins: [
-      [
-        "docusaurus-plugin-typedoc-api",
-        {
-          projectRoot: path.join(__dirname, ".."),
-          packages: ["."],
-          minimal: true,
-        },
-      ],
+      // [
+      //   "docusaurus-plugin-typedoc-api",
+      //   {
+      //     projectRoot: path.join(__dirname, "..", 'ethereal-react'),
+      //     packages: ["."],
+      //     // minimal: true,
+      //   },
+      // ],
     ],
 
     presets: [
@@ -34,6 +34,7 @@ const pkg = require('../package.json');
         /** @type {import('@docusaurus/preset-classic').Options} */
         ({
           docs: {
+            routeBasePath: '/',
             sidebarPath: require.resolve("./sidebars.js"),
             editUrl:
               "https://github.com/kesne/ethereal-react/edit/main/website/",
@@ -60,17 +61,17 @@ const pkg = require('../package.json');
               position: "left",
               href: `https://www.npmjs.com/package/${pkg.name}`,
             },
-            {
-              type: "doc",
-              docId: "intro",
-              position: "left",
-              label: "Docs",
-            },
-            {
-              to: "api",
-              label: "API",
-              position: "left",
-            },
+            // {
+            //   type: "doc",
+            //   docId: "intro",
+            //   position: "left",
+            //   label: "Docs",
+            // },
+            // {
+            //   to: "api",
+            //   label: "API",
+            //   position: "left",
+            // },
             {
               href: "https://github.com/facebook/docusaurus",
               label: "GitHub",
