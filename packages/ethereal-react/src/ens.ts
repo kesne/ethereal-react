@@ -1,3 +1,4 @@
+import { useAddressOrDefault } from "./accounts";
 import { EtherealProvider, useProvider } from "./provider";
 import { createAsset } from "./utils/use-asset";
 
@@ -28,7 +29,8 @@ const ensForAddressAsset = createAsset(
   }
 );
 
-export function useENSForAddress(address: string) {
+export function useENSForAddress(address?: string) {
   const provider = useProvider();
-  return ensForAddressAsset.read(provider, address);
+  const userAddress = useAddressOrDefault(address);
+  return ensForAddressAsset.read(provider, userAddress);
 }

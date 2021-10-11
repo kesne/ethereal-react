@@ -1,7 +1,8 @@
 {
   "name": "ethereal-react",
   "version": "0.0.0",
-  "description": "Suspense and concurrent React hooks and components to make it easier to develop Ethereum applications.",
+  "description": "React hooks and components to make it easy to develop Ethereum dApps.",
+  "sideEffects": false,
   "type": "module",
   "source": "src/index.ts",
   "exports": "./dist/index.modern.js",
@@ -13,7 +14,14 @@
     "build": "microbundle",
     "dev": "microbundle watch"
   },
-  "keywords": [],
+  "keywords": [
+    "react",
+    "hooks",
+    "eth",
+    "ethereum",
+    "dapps",
+    "wallet"
+  ],
   "author": "vapejuicejordan.eth",
   "license": "MIT",
   "dependencies": {

@@ -25,6 +25,18 @@ interface WalletProviderProps extends Partial<ICoreOptions> {
   web3Modal?: Web3Modal;
 }
 
+export function useWeb3Modal() {
+  const web3ModalContext = useContext(Web3ModalContext);
+
+  if (!web3ModalContext) {
+    throw new Error(
+      "The `useWeb3Modal` hook must be used inside of the `WalletProvider`."
+    );
+  }
+
+  return web3ModalContext.web3Modal;
+}
+
 export function useLogout() {
   const web3ModalContext = useContext(Web3ModalContext);
 

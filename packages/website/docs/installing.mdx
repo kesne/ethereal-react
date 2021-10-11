@@ -1,0 +1,62 @@
+---
+sidebar_position: 2
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# Installing
+
+Installing `ethereal-react` can be done with any npm-compatible package manager, such as `yarn`, `npm`. We recommend [`pnpm`](https://pnpm.io/), as it provides a great user experience, and is incredibly fast.
+
+<Tabs
+  groupId="package-manager"
+  defaultValue="yarn"
+  values={[
+    { label: 'pnpm', value: 'pnpm' },
+    { label: 'Yarn', value: 'yarn' },
+    { label: 'npm', value: 'npm' },
+  ]}
+>
+  <TabItem value="pnpm">
+
+```bash
+pnpm add ethereal-react
+```
+
+  </TabItem>
+  <TabItem value="yarn">
+
+```bash
+yarn add ethereal-react
+```
+
+  </TabItem>
+  <TabItem value="npm">
+
+```bash
+npm add ethereal-react
+```
+
+  </TabItem>
+</Tabs>
+
+**ETHERS**
+
+TODO: Your project may need `ethers` installed if it does not already.
+
+## Importing the package
+
+The `ethereal-react` package exports modern ES modules, in addition to legacy formats.
+Using ES modules is preferred, as it allows for the package to be effectly tree-shaken, which can result in smaller bundles being delivered to end-users.
+For example, using the named exports from the package with ESM works as follows:
+
+```tsx
+import { Provider } from "ethereal-react";
+```
+
+If your project uses CommonJS, then you can use `require` with `ethereal-react` as well:
+
+```tsx
+const { Provider } = require("react");
+```

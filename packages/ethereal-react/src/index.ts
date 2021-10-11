@@ -1,5 +1,10 @@
 export { useProvider, Provider } from "./provider";
-export { useConnectToWallet, WalletProvider, useLogout } from "./wallet";
+export {
+  useConnectToWallet,
+  WalletProvider,
+  useLogout,
+  useWeb3Modal,
+} from "./wallet";
 export { useContract, useReadContract, useWriteContract } from "./contracts";
 export { useUserAddress, useBalance } from "./accounts";
 export { useTokenBalance } from "./tokens";

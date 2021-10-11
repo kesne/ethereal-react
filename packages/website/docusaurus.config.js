@@ -19,14 +19,14 @@ const pkg = require('../ethereal-react/package.json');
     trailingSlash: true,
 
     plugins: [
-      // [
-      //   "docusaurus-plugin-typedoc-api",
-      //   {
-      //     projectRoot: path.join(__dirname, "..", 'ethereal-react'),
-      //     packages: ["."],
-      //     // minimal: true,
-      //   },
-      // ],
+      [
+        "docusaurus-plugin-typedoc-api",
+        {
+          projectRoot: path.join(__dirname, "..", 'ethereal-react'),
+          packages: ["."],
+          // minimal: true,
+        },
+      ],
     ],
 
     presets: [
@@ -62,17 +62,17 @@ const pkg = require('../ethereal-react/package.json');
               position: "left",
               href: `https://www.npmjs.com/package/${pkg.name}`,
             },
-            // {
-            //   type: "doc",
-            //   docId: "intro",
-            //   position: "left",
-            //   label: "Docs",
-            // },
-            // {
-            //   to: "api",
-            //   label: "API",
-            //   position: "left",
-            // },
+            {
+              type: "doc",
+              docId: "introduction",
+              position: "left",
+              label: "Docs",
+            },
+            {
+              to: "api",
+              label: "API",
+              position: "left",
+            },
             {
               href: "https://github.com/facebook/docusaurus",
               label: "GitHub",
