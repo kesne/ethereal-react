@@ -16,6 +16,7 @@ const pkg = require('../ethereal-react/package.json');
     favicon: "img/favicon.ico",
     organizationName: "kesne",
     projectName: "ethereal-react",
+    trailingSlash: true,
 
     plugins: [
       // [
