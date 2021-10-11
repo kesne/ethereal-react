@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkwebsite=self.webpackChunkwebsite||[]).push([[580],{9421:function(e){e.exports=JSON.parse('{"id":75,"name":"useENSForAddress","nextId":19,"permalink":"/ethereal-react/api/ethereal-react/function/useENSForAddress","previousId":25}')}}]);
