@@ -1,5 +1,4 @@
-import { useProvider } from ".";
-import { EtherealProvider } from "./provider";
+import { EtherealProvider, useProvider } from "./provider";
 import { createAsset } from "./utils/use-asset";
 
 const resolveENSAsset = createAsset(

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 
 // NOTE: This batches updates for React < 18. In React >= 18, updates are automatically

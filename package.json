@@ -2,7 +2,10 @@
   "name": "ethereal-monorepo",
   "version": "1.0.0",
   "private": true,
-  "scripts": {},
+  "scripts": {
+    "build": "pnpm run --recursive build",
+    "release": "pnpm run --filter ethereal-react build && changeset publish"
+  },
   "devDependencies": {
     "@changesets/cli": "^2.17.0",
     "typescript": "^4.4.3"
