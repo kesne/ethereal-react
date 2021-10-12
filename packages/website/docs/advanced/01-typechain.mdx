@@ -1,0 +1,65 @@
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# TypeChain Support
+
+All of the contract methods support [TypeChain](https://github.com/dethcrypto/TypeChain), which allows for deeper TypeScript integration, with better typings.
+
+## Installing TypeChain
+
+<Tabs
+  groupId="package-manager"
+  defaultValue="pnpm"
+  values={[
+    { label: 'pnpm', value: 'pnpm' },
+    { label: 'Yarn', value: 'yarn' },
+    { label: 'npm', value: 'npm' },
+  ]}
+>
+  <TabItem value="pnpm">
+
+```bash
+pnpm add typechain @typechain/ethers-v5 ethers
+```
+
+  </TabItem>
+  <TabItem value="yarn">
+
+```bash
+yarn add typechain @typechain/ethers-v5 ethers
+```
+
+  </TabItem>
+  <TabItem value="npm">
+
+```bash
+npm add typechain @typechain/ethers-v5 ethers
+```
+
+  </TabItem>
+</Tabs>
+
+## Configuring TypeChain
+
+TypeChain must be configured to output types for `ethers-v5`. This can be done by setting `--target=ethers-v5` when running the `typechain` command.
+
+### Hardhat
+
+If you are using hardhat, we recommend using the [hardhat typechain plugin](https://www.npmjs.com/package/@typechain/hardhat) to simplify the process of generating types.
+
+## Using TypeChain Generated Contracts
+
+TypeChain emits a contract factory, which can be used in place of the ABI in the `useContract` hook. This will automatically preserve the contract typings, which are also supported in the `useReadContract` and `useWriteContract` hooks.
+
+```tsx
+import { useContract, useReadContract } from "ethereal-react";
+import { Greeter__factory } from "./typechain";
+
+function Greeter() {
+  const contract = useContract(CONTRACT_ADDRESS, Greeter__factory);
+  // This is type-checked!
+  const greeting = useReadContract(contract, "greeting");
+
+  return <div>Current greeting: {greeting}</div>;
+}
+```

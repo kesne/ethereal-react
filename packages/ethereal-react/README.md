@@ -12,4 +12,4 @@ A collection of React hooks and components, making it easy to develop frontends 
 
 ## Getting Started
 
-## Documentation
+[Read the documentation site](https://kesne.github.io/ethereal-react/) for details about how to integrate `ethereal-react` in your project.

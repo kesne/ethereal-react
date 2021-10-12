@@ -1,11 +1,10 @@
 import { createAsset } from "./utils/use-asset";
 import { useProvider, EtherealProvider } from "./provider";
+import { BigNumber } from "@ethersproject/bignumber";
 
-const userAddressCache = createAsset(
-  async (provider: EtherealProvider) => {
-    return provider.getSigner().getAddress();
-  }
-);
+const userAddressCache = createAsset(async (provider: EtherealProvider) => {
+  return provider.getSigner().getAddress();
+});
 
 export function useAddressOrDefault(address?: string) {
   const provider = useProvider();
@@ -15,6 +14,10 @@ export function useAddressOrDefault(address?: string) {
   return userAddressCache.read(provider);
 }
 
+/**
+ * Loads the public address of the currently connected wallet.
+ * This hook will suspend while it loads.
+ */
 export function useUserAddress() {
   const provider = useProvider();
   return userAddressCache.read(provider);
@@ -26,7 +29,15 @@ const balanceAsset = createAsset(
   }
 );
 
-export function useBalance(address?: string) {
+/**
+ * Loads the current Ethers balance (in wei) of the provided address.
+ * This hook will suspend while it loads.
+ *
+ * @param address The address that you would like to check the balance of. If it is not provided, then the address of the connected wallet is used instead.
+ * @returns The current balance of the address, in wei.
+ * @see https://docs.ethers.io/v5/single-page/#/v5/api/providers/provider/-%23-Provider-getBalance
+ */
+export function useBalance(address?: string): BigNumber {
   const provider = useProvider();
   const userAddress = useAddressOrDefault(address);
   return balanceAsset.read(provider, userAddress);

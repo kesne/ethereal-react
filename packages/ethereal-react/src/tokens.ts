@@ -12,7 +12,7 @@ const tokenBalanceAsset = createAsset(
 
 /**
  * Gets the current token balance for a specified address, or the currently-connected wallet.
- * This should be used on ERC20 or ERC721 contracts.
+ * This should be used on ERC20 or ERC721 contracts that implement the `balanceOf(address)` function.
  *
  * @param contract The smart contract address for the token. Should be an ERC20 or ERC721 contract.
  * @param address The address. Defaults to the address of the connected wallet.

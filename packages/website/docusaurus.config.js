@@ -8,7 +8,7 @@ const pkg = require('../ethereal-react/package.json');
 (
   module.exports = {
     title: "Ethereal React",
-    tagline: "TODO: Tagline",
+    tagline: "A collection of React hooks and components, making it easy to develop frontends for Ethereum dApps.",
     url: "https://kesne.github.io/",
     baseUrl: "/ethereal-react/",
     onBrokenLinks: "throw",
@@ -24,7 +24,6 @@ const pkg = require('../ethereal-react/package.json');
         {
           projectRoot: path.join(__dirname, "..", 'ethereal-react'),
           packages: ["."],
-          // minimal: true,
         },
       ],
     ],
@@ -38,7 +37,7 @@ const pkg = require('../ethereal-react/package.json');
             routeBasePath: '/',
             sidebarPath: require.resolve("./sidebars.js"),
             editUrl:
-              "https://github.com/kesne/ethereal-react/edit/main/website/",
+              "https://github.com/kesne/ethereal-react/edit/main/packages/website/",
           },
           theme: {
             customCss: require.resolve("./src/css/custom.css"),
@@ -54,7 +53,7 @@ const pkg = require('../ethereal-react/package.json');
           title: "Ethereal React",
           logo: {
             alt: "Ethereal React Logo",
-            src: "img/logo.svg",
+            src: "img/logo.png",
           },
           items: [
             {
@@ -74,7 +73,7 @@ const pkg = require('../ethereal-react/package.json');
               position: "left",
             },
             {
-              href: "https://github.com/facebook/docusaurus",
+              href: "https://github.com/kesne/ethereal-react",
               label: "GitHub",
               position: "right",
             },

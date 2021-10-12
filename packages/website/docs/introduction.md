@@ -5,32 +5,16 @@ slug: /
 
 # Introduction
 
-Let's discover **Docusaurus in less than 5 minutes**.
+A collection of React hooks and components, making it easy to develop frontends for Ethereum dApps.
 
-## Getting Started
+## Features
 
-Get started by **creating a new site**.
+- Powered by the popular [ethers](https://ethers.org/) package, which handles all ethereum functionality.
+- Leverages modern React features, such as Suspense, Error Boundaries, and concurrent rendering.
+- Built-in support for connecting to wallets using [Web3Modal](https://github.com/Web3Modal/web3modal).
+- Full support for TypeScript out of the box, including fully-typed contracts with [TypeChain](https://github.com/dethcrypto/TypeChain).
+- Small bundle size, and tree-shakable module. Currently ~2.5 kB gzipped for all features.
 
-Or **try Docusaurus immediately** with **[docusaurus.new](https://docusaurus.new)**.
+## Requirements
 
-## Generate a new site
-
-Generate a new Docusaurus site using the **classic template**:
-
-```shell
-npx @docusaurus/init@latest init my-website classic
-```
-
-## Start your site
-
-Run the development server:
-
-```shell
-cd my-website
-
-npx docusaurus start
-```
-
-Your site starts at `http://localhost:3000`.
-
-Open `docs/intro.md` and edit some lines: the site **reloads automatically** and display your changes.
+- React 17+, works best in React versions that support concurrent rendering (18+).

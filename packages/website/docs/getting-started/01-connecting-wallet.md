@@ -1,3 +1,6 @@
+---
+---
+
 # Connecting to Wallets
 
 Connecting your dApp to your users wallets is simple, and powered by [Web3Modal](https://github.com/Web3Modal/web3modal).
