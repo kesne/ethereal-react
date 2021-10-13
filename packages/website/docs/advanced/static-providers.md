@@ -1,3 +1,7 @@
+---
+sidebar_position: 6
+---
+
 # Static Providers
 
 If your project does not need to use the wallet, and instead can just use a JSON-RPC provider, then you can use the low-level `Provider` component.

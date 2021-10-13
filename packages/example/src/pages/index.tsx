@@ -12,6 +12,7 @@ import {
   ContractTransaction,
   useLogout,
 } from "ethereal-react";
+import { TechStackList } from "src/components/TechStackList";
 
 function Minted({
   transaction,
@@ -77,13 +78,11 @@ export default function App() {
     [...ERC721_ABI, "function claim(uint256 tokenId)"]
   );
 
-  const stack = useTokenBalance(TechStack);
-
   return (
     <div>
       <div>Block number: {block.number}</div>
       <div>Balance: {balance.toString()}</div>
-      <div>Current TechStack: {stack.toString()}</div>
+      <TechStackList />
       <Minter contract={TechStack} />
       <button onClick={logout}>Logout</button>
     </div>

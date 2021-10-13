@@ -1,3 +1,7 @@
+---
+sidebar_position: 5
+---
+
 # Blocks
 
 ## Reading the current block
