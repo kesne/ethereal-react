@@ -1,4 +1,5 @@
 ---
+sidebar_position: 2
 ---
 
 # Displaying User Information
@@ -29,4 +30,4 @@ function App() {
 }
 ```
 
-In order to display a loading UI while the data is loaded, we take advantage of `Suspense`, which will render the `fallback` while the data is loaded. You can learn more about this in the "[Loading and Error States](./04-loading-and-error-states.md)" docs.
+In order to display a loading UI while the data is loaded, we take advantage of `Suspense`, which will render the `fallback` while the data is loaded. You can learn more about this in the "[Loading and Error States](./loading-and-error-states.md)" docs.

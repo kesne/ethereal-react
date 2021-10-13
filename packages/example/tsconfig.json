@@ -1,11 +1,21 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "baseUrl": ".",
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
     "paths": {
       "ethereal-react": ["../ethereal-react/src"]
-    },
-    "types": ["react/experimental", "react-dom/experimental", "vite/client"]
-  }
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
