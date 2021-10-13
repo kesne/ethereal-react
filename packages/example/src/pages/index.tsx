@@ -1,9 +1,5 @@
-import "./polyfill";
-import { StrictMode, Suspense, useState } from "react";
-import { createRoot } from "react-dom";
+import { Suspense, useState } from "react";
 import {
-  useConnectToWallet,
-  WalletProvider,
   useTokenBalance,
   useContract,
   ERC721_ABI,
@@ -16,18 +12,6 @@ import {
   ContractTransaction,
   useLogout,
 } from "ethereal-react";
-// @ts-ignore: This package does not have types.
-import WalletConnectProvider from "@walletconnect/web3-provider";
-
-function ConnectButton() {
-  const [connect, { loading }] = useConnectToWallet();
-
-  return (
-    <button onClick={connect} disabled={loading}>
-      Connect to Wallet
-    </button>
-  );
-}
 
 function Minted({
   transaction,
@@ -81,7 +65,7 @@ function Minter({ contract }: { contract: Contract }) {
   );
 }
 
-function App() {
+export default function App() {
   const logout = useLogout();
   const [block] = useBlock();
   const balance = useBalance();
@@ -105,29 +89,3 @@ function App() {
     </div>
   );
 }
-
-if (!globalThis.reactRoot) {
-  globalThis.reactRoot = createRoot(document.getElementById("root")!);
-}
-
-globalThis.reactRoot.render(
-  <StrictMode>
-    <Suspense fallback="Loading...">
-      <WalletProvider
-        cacheProvider
-        network="ropsten"
-        providerOptions={{
-          walletconnect: {
-            package: WalletConnectProvider,
-            options: {
-              infuraId: import.meta.env.VITE_INFURA_ID,
-            },
-          },
-        }}
-        fallback={<ConnectButton />}
-      >
-        <App />
-      </WalletProvider>
-    </Suspense>
-  </StrictMode>
-);

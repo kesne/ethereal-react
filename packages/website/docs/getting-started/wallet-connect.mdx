@@ -1,0 +1,85 @@
+---
+sidebar_position: 5
+---
+
+# Setting up WalletConnect
+
+[WalletConnect](https://walletconnect.org/) is a protocol that allows for dapps to easily connect to mobile wallets. Adding support for it is incredibly simple thanks to Web3Modal, and helps increase the user reach of your application.
+
+For more details, you can read the [WalletConnect documentation](https://docs.walletconnect.org/).
+
+## Install dependencies
+
+:::note
+
+This package requires that your application bundler provides certail globals that are common in Node.js environments.
+Modern tooling like Vite do not provide these by default, and you will need to ensure that your environment is setup to provide the required globals.
+
+:::
+
+First, you need to install the `@walletconnect/web3-provider` package with your preferred package manager.
+
+<Tabs
+  groupId="package-manager"
+  defaultValue="pnpm"
+  values={[
+    { label: 'pnpm', value: 'pnpm' },
+    { label: 'Yarn', value: 'yarn' },
+    { label: 'npm', value: 'npm' },
+  ]}
+>
+  <TabItem value="pnpm">
+
+```bash
+pnpm add @walletconnect/web3-provider
+```
+
+  </TabItem>
+  <TabItem value="yarn">
+
+```bash
+yarn add @walletconnect/web3-provider
+```
+
+  </TabItem>
+  <TabItem value="npm">
+
+```bash
+npm add @walletconnect/web3-provider
+```
+
+  </TabItem>
+</Tabs>
+
+## Configuring the provider
+
+The WalletConnect provider requires an Infrua Project ID. Getting one is simple and free, we recommend [following this guide](https://blog.infura.io/getting-started-with-infura-28e41844cc89/) to get your ID.
+This ID is generally stored in an `.env` file to be made available as an enviroment variable.
+
+Once you have an ID, you can use the `providerOptions` to configure the WalletConnect provider.
+
+```tsx
+import { WalletProvider } from "ethereal-react";
+import WalletConnectProvider from "@walletconnect/web3-provider";
+
+function App() {
+  return (
+    <WalletProvider
+      cacheProvider
+      providerOptions={{
+        walletconnect: {
+          package: WalletConnectProvider,
+          options: {
+            infuraId: process.env.NEXT_PUBLIC_INFURA_ID,
+          },
+        },
+      }}
+      fallback={<ConnectButton />}
+    >
+      <ConnectedApp />
+    </WalletProvider>
+  );
+}
+```
+
+For more details and documentation of the WalletConnect provider options, read the [WalletConnect docs for dapps](https://docs.walletconnect.org/quick-start/dapps/web3-provider#setup).
