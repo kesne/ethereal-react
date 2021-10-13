@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkwebsite=self.webpackChunkwebsite||[]).push([[474],{4001:function(e){e.exports=JSON.parse('{"id":0,"name":"ethereal-react","permalink":"/ethereal-react/api/ethereal-react"}')}}]);

@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkwebsite=self.webpackChunkwebsite||[]).push([[123],{6663:function(e){e.exports=JSON.parse('{"id":52,"name":"useBalance","nextId":67,"permalink":"/ethereal-react/api/ethereal-react/function/useBalance","previousId":16}')}}]);

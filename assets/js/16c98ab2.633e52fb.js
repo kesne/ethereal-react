@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkwebsite=self.webpackChunkwebsite||[]).push([[4031],{2872:function(e){e.exports=JSON.parse('{"id":64,"name":"useTokenMetadata","nextId":73,"permalink":"/ethereal-react/api/ethereal-react/function/useTokenMetadata","previousId":55}')}}]);

@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkwebsite=self.webpackChunkwebsite||[]).push([[2190],{6227:function(e){e.exports=JSON.parse('{"id":95,"name":"useWaitForTransaction","nextId":23,"permalink":"/ethereal-react/api/ethereal-react/function/useWaitForTransaction","previousId":50}')}}]);
