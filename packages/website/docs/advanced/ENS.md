@@ -1,3 +1,7 @@
+---
+sidebar_position: 4
+---
+
 # Resolving ENS
 
 [ENS](https://ens.domains/) resolution is built-in, with both forward and backwards resolution supported.

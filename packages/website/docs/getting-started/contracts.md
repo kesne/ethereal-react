@@ -29,9 +29,9 @@ const CONTRACT_ABI = [
 const contract = useContract(CONTRACT_ADDRESS, CONTRACT_ABI);
 ```
 
-We include [common ABIs](../advanced/02-ABIs.md) for well-known contract types (ERC-20 and ERC-721 tokens).
+We include [common ABIs](../advanced/ABIs.md) for well-known contract types (ERC-20 and ERC-721 tokens).
 
-For full TypeScript support, you can also use a generated TypeChain factory in place of a contract ABI. For more details, [you can read the TypeChain docs](../advanced/01-typechain.mdx).
+For full TypeScript support, you can also use a generated TypeChain factory in place of a contract ABI. For more details, [you can read the TypeChain docs](../advanced/typechain.mdx).
 
 ## Reading data from contracts
 

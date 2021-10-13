@@ -1,3 +1,7 @@
+---
+sidebar_position: 2
+---
+
 # Common ABIs
 
 To help make developing your dApps easier, we include a set of pre-built [ABIs](https://docs.ethers.io/v5/api/utils/abi/) for common contracts. These ABIs can be used directly with the `useContract` hook, and easily extended.
