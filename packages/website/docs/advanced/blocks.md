@@ -26,16 +26,32 @@ function BlockWatcher() {
 }
 ```
 
-## Block notification
+### Only getting blocks once
 
-You can use the `useOnBlock` hook to be notified of whenever new blocks are added to the blockchain.
+If you do not wish to have the UI re-render when the new blocks are received, you can use the `useBlockOnce` hook, which will only deliver the most recent block once.
 
 ```tsx
-import { useOnBlock } from "ethereal-react";
+import { useBlockOnce } from "ethereal-react";
+
+function BlockOnce() {
+  const block = useBlockOnce();
+
+  return <div>Current Block: {block.timestamp}</div>;
+}
+```
+
+## Block notification
+
+You can use the `useBlock` hook, along with a `useEffect` hook to have logic that runs when a block is added to the blockchain.
+
+```tsx
+import { useEffect } from "react";
+import { useBlock } from "ethereal-react";
 
 function BlockWatcher() {
-  useOnBlock(() => {
-    console.log("A new block was added.");
-  });
+  const block = useBlock();
+  useEffect(() => {
+    console.log("Block discovered");
+  }, [block]);
 }
 ```

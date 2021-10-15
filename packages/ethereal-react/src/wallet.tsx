@@ -1,3 +1,4 @@
+import type { EventEmitter } from "events";
 import { ExternalProvider, Web3Provider } from "@ethersproject/providers";
 import {
   createContext,
@@ -92,22 +93,38 @@ export function WalletProvider(props: WalletProviderProps) {
   useEffect(() => {
     if (!provider || !externalProvider) return;
 
-    provider.on("chainChanged", (chainId) => {
-      console.log(`chain changed to ${chainId}! updating providers`);
-      setProvider(new Web3Provider(externalProvider));
-    });
+    const events = [
+      ["chainChanged", () => setProvider(new Web3Provider(externalProvider))],
+      [
+        "accountsChanged",
+        () => setProvider(new Web3Provider(externalProvider)),
+      ],
+      ["disconnect", () => setProvider(null)],
+    ] as const;
 
-    provider.on("accountsChanged", () => {
-      console.log(`account changed!`);
-      setProvider(new Web3Provider(externalProvider));
-    });
+    try {
+      events.forEach(([key, fn]) => {
+        (externalProvider as EventEmitter).on(key, fn);
+      });
+    } catch (e) {
+      console.warn(
+        "Unable to attach event listener to the connected wallet.",
+        e
+      );
+    }
 
-    // Subscribe to session disconnection
-    provider.on("disconnect", (code, reason) => {
-      console.log("Disconnect", { code, reason });
-      web3Modal.clearCachedProvider();
-      setProvider(null);
-    });
+    return () => {
+      try {
+        events.forEach(([key, fn]) => {
+          (externalProvider as EventEmitter).removeListener(key, fn);
+        });
+      } catch (e) {
+        console.warn(
+          "Unable to remove event listener to the connected wallet.",
+          e
+        );
+      }
+    };
   }, [provider, externalProvider]);
 
   return (
