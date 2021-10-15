@@ -1,4 +1,4 @@
-import { Web3Provider } from "@ethersproject/providers";
+import { ExternalProvider, Web3Provider } from "@ethersproject/providers";
 import {
   createContext,
   ReactNode,
@@ -9,12 +9,13 @@ import {
   useState,
 } from "react";
 import Web3Modal, { ICoreOptions } from "web3modal";
-import { EtherealProvider, Provider } from "./provider";
+import { Provider } from "./provider";
+import { safeBatchedUpdates } from "./utils/batch-updates";
 import { useMutation } from "./utils/use-mutation";
 
 const Web3ModalContext = createContext<{
   web3Modal: Web3Modal;
-  setProvider(provider: EtherealProvider | null): void;
+  updateProvider(provider: ExternalProvider | null): void;
 } | null>(null);
 
 interface WalletProviderProps extends Partial<ICoreOptions> {
@@ -47,7 +48,7 @@ export function useLogout() {
   }
 
   return () => {
-    web3ModalContext.setProvider(null);
+    web3ModalContext.updateProvider(null);
     web3ModalContext.web3Modal.clearCachedProvider();
   };
 }
@@ -60,25 +61,57 @@ export function WalletProvider(props: WalletProviderProps) {
     web3Modal: providedWeb3Modal,
     ...web3ModalOptions
   } = props;
-  const [provider, setProvider] = useState<EtherealProvider | null>(null);
+
+  const [externalProvider, setExternalProvider] =
+    useState<ExternalProvider | null>(null);
+
+  const [provider, setProvider] = useState<Web3Provider | null>(null);
 
   const web3Modal = useMemo(() => {
     if (providedWeb3Modal) return providedWeb3Modal;
     return new Web3Modal(web3ModalOptions);
   }, [providedWeb3Modal]);
 
+  const updateProvider = useCallback((provider: ExternalProvider) => {
+    safeBatchedUpdates(() => {
+      setExternalProvider(provider);
+      setProvider(new Web3Provider(provider));
+    });
+  }, []);
+
   useEffect(() => {
     // If we have a cached provider, and we wish to honor the cached provider,
     // then automatically just connect to that.
     if (web3Modal.cachedProvider && web3ModalOptions.cacheProvider) {
-      web3Modal.connect().then((provider) => {
-        setProvider(new Web3Provider(provider));
-      });
+      web3Modal.connect().then(updateProvider);
     }
   }, [web3Modal]);
 
+  // Listen to changes on the provider so that we can automatically reflect account
+  // changes in the UI.
+  useEffect(() => {
+    if (!provider || !externalProvider) return;
+
+    provider.on("chainChanged", (chainId) => {
+      console.log(`chain changed to ${chainId}! updating providers`);
+      setProvider(new Web3Provider(externalProvider));
+    });
+
+    provider.on("accountsChanged", () => {
+      console.log(`account changed!`);
+      setProvider(new Web3Provider(externalProvider));
+    });
+
+    // Subscribe to session disconnection
+    provider.on("disconnect", (code, reason) => {
+      console.log("Disconnect", { code, reason });
+      web3Modal.clearCachedProvider();
+      setProvider(null);
+    });
+  }, [provider, externalProvider]);
+
   return (
-    <Web3ModalContext.Provider value={{ web3Modal, setProvider }}>
+    <Web3ModalContext.Provider value={{ web3Modal, updateProvider }}>
       {provider ? (
         <Provider name={name} provider={provider}>
           {children}
@@ -99,11 +132,9 @@ export function useConnectToWallet() {
     );
   }
 
-  const { web3Modal, setProvider } = web3ModalContext;
+  const { web3Modal, updateProvider } = web3ModalContext;
 
   return useMutation(async () => {
-    return web3Modal.connect().then((provider) => {
-      setProvider(new Web3Provider(provider));
-    });
+    return web3Modal.connect().then(updateProvider);
   }, [web3Modal]);
 }
