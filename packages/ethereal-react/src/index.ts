@@ -17,6 +17,7 @@ export { useBlock, useBlockOnce } from "./blocks";
 export { useGasPrice } from "./gas";
 export { useWaitForTransaction } from "./transactions";
 export { useENSForAddress, useResolveENS } from "./ens";
+export { useNetwork } from './network';
 
 // Re-export types from Ethers that are used frequently:
 // TODO: Figure out if this is what we want to do long term, or if we're just fine
