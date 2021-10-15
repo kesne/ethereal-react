@@ -1,5 +1,5 @@
 import { ContractTransaction } from "@ethersproject/contracts";
-import { useProvider } from "../dist";
+import { useProvider } from "./provider";
 import { createAsset } from "./utils/use-asset";
 import { useMutation } from "./utils/use-mutation";
 

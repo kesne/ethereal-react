@@ -15,7 +15,7 @@ export {
 export { ERC20_ABI, ERC165_ABI, ERC721_ABI } from "./abi";
 export { useBlock, useBlockOnce } from "./blocks";
 export { useGasPrice } from "./gas";
-export { useWaitForTransaction } from "./transactions";
+export { useWaitForTransaction, useSignMessage } from "./transactions";
 export { useENSForAddress, useResolveENS } from "./ens";
 
 // Re-export types from Ethers that are used frequently:
