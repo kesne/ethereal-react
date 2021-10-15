@@ -1,39 +1,11 @@
-import { useEffect, useTransition } from "react";
-import { Listener } from "@ethersproject/providers";
+import { useEffect } from "react";
 import { useProvider, EtherealProvider } from "./provider";
 import { createAsset, useAsset } from "./utils/use-asset";
-
-/**
- * Listens to the network and invokes a callback whenever a new block is added to the network.
- * This hook will not suspend.
- *
- * @param listener A function that will be called every time a new block is added to the network.
- */
-export function useOnBlock(listener: Listener): void {
-  const provider = useProvider();
-
-  useEffect(() => {
-    provider.on("block", listener);
-    return () => {
-      provider.off("block", listener);
-    };
-  }, [provider]);
-}
+import { useSafeTransition } from "./utils/use-transition";
 
 const blockAsset = createAsset(async (provider: EtherealProvider) => {
   return provider.getBlock(await provider.getBlockNumber());
 });
-
-function useSafeTransition() {
-  if (useTransition) {
-    return useTransition();
-  }
-
-  return [false, (cb: () => void) => cb()] as const;
-}
-
-// TODO: Should this automatically re-fetch, or should we just return the `refetch` method
-// that lets users refetch if they want to?
 
 /**
  * Loads the most recent block from the network.
@@ -49,13 +21,33 @@ export function useBlock() {
   const [block, refresh] = useAsset(blockAsset, provider);
   const [isInFlight, startTransition] = useSafeTransition();
 
-  useOnBlock(() => {
-    // NOTE: We run this inside of a transition so that the previous UI can still
-    // be shown while we fetch new block data.
-    startTransition(() => {
-      refresh();
-    });
-  });
+  useEffect(() => {
+    const onBlock = () => {
+      // NOTE: We run this inside of a transition so that the previous UI can still
+      // be shown while we fetch new block data.
+      startTransition(() => {
+        refresh();
+      });
+    };
+
+    provider.on("block", onBlock);
+    return () => {
+      provider.off("block", onBlock);
+    };
+  }, [provider]);
 
   return [block, isInFlight] as const;
+}
+
+/**
+ * Loads the most recent block from the network. This hook only loads the block once,
+ * and will not automatically load new blocks.
+ * This hook will suspend while it loads.
+ *
+ * @returns A `Block` object from `ethers`.
+ */
+export function useBlockOnce() {
+  const provider = useProvider();
+  const block = blockAsset.read(provider);
+  return block;
 }
