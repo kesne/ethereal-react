@@ -1,9 +1,10 @@
 import { AppProps } from "next/app";
 import { Suspense } from "react";
-import { WalletProvider } from "ethereal-react";
+import { RequireNetwork, WalletProvider } from "ethereal-react";
 // @ts-ignore: This package does not have types.
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { ConnectButton } from "../components/ConnectButton";
+import { SwitchNetwork } from "../components/SwitchNetwork";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -21,7 +22,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         }}
         fallback={<ConnectButton />}
       >
-        <Component {...pageProps} />
+        <RequireNetwork chainId={3} fallback={<SwitchNetwork />}>
+          <Component {...pageProps} />
+        </RequireNetwork>
       </WalletProvider>
     </Suspense>
   );
