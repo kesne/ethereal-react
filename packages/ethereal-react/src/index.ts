@@ -7,9 +7,14 @@ export {
 } from "./wallet";
 export { useContract, useReadContract, useWriteContract } from "./contracts";
 export { useUserAddress, useBalance } from "./accounts";
-export { useTokenBalance, useTokenMetadata, useTokenMetadataByIndex } from "./tokens";
+export {
+  useTokenBalance,
+  useTokenMetadata,
+  useTokenMetadataByIndex,
+} from "./tokens";
 export { ERC20_ABI, ERC165_ABI, ERC721_ABI } from "./abi";
-export { useBlock, useOnBlock } from "./blocks";
+export { useBlock, useBlockOnce } from "./blocks";
+export { useGasPrice } from "./gas";
 export { useWaitForTransaction } from "./transactions";
 export { useENSForAddress, useResolveENS } from "./ens";
 
