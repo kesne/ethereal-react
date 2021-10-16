@@ -8,25 +8,25 @@ import { SwitchNetwork } from "../components/SwitchNetwork";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <Suspense fallback="Loading...">
-      <WalletProvider
-        cacheProvider
-        network="ropsten"
-        providerOptions={{
-          walletconnect: {
-            package: WalletConnectProvider,
-            options: {
-              infuraId: process.env.NEXT_PUBLIC_INFURA_ID,
-            },
+    <WalletProvider
+      cacheProvider
+      network="ropsten"
+      providerOptions={{
+        walletconnect: {
+          package: WalletConnectProvider,
+          options: {
+            infuraId: process.env.NEXT_PUBLIC_INFURA_ID,
           },
-        }}
-        fallback={<ConnectButton />}
-      >
+        },
+      }}
+      fallback={<ConnectButton />}
+    >
+      <Suspense fallback="Loading...">
         <RequireNetwork chainId={3} fallback={<SwitchNetwork />}>
           <Component {...pageProps} />
         </RequireNetwork>
-      </WalletProvider>
-    </Suspense>
+      </Suspense>
+    </WalletProvider>
   );
 }
 

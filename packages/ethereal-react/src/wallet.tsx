@@ -15,7 +15,7 @@ import { safeBatchedUpdates } from "./utils/batch-updates";
 import { useMutation } from "./utils/use-mutation";
 
 const Web3ModalContext = createContext<{
-  web3Modal: Web3Modal;
+  web3Modal: Web3Modal | null;
   updateProvider(provider: ExternalProvider | null): void;
 } | null>(null);
 
@@ -50,7 +50,7 @@ export function useLogout() {
 
   return () => {
     web3ModalContext.updateProvider(null);
-    web3ModalContext.web3Modal.clearCachedProvider();
+    web3ModalContext.web3Modal?.clearCachedProvider();
   };
 }
 
@@ -69,7 +69,11 @@ export function WalletProvider(props: WalletProviderProps) {
   const [provider, setProvider] = useState<Web3Provider | null>(null);
 
   const web3Modal = useMemo(() => {
+    // To support SSR environments, we just create this as null:
+    if (typeof window === "undefined") return null;
+
     if (providedWeb3Modal) return providedWeb3Modal;
+
     return new Web3Modal(web3ModalOptions);
   }, [providedWeb3Modal]);
 
@@ -81,6 +85,8 @@ export function WalletProvider(props: WalletProviderProps) {
   }, []);
 
   useEffect(() => {
+    if (!web3Modal) return;
+
     // If we have a cached provider, and we wish to honor the cached provider,
     // then automatically just connect to that.
     if (web3Modal.cachedProvider && web3ModalOptions.cacheProvider) {
@@ -152,6 +158,11 @@ export function useConnectToWallet() {
   const { web3Modal, updateProvider } = web3ModalContext;
 
   return useMutation(async () => {
+    if (!web3Modal) {
+      throw new Error(
+        "Attempting to connect, but no `web3modal` instance was found."
+      );
+    }
     return web3Modal.connect().then(updateProvider);
   }, [web3Modal]);
 }
