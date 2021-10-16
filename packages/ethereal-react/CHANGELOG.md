@@ -1,5 +1,11 @@
 # ethereal-react
 
+## 0.3.2
+
+### Patch Changes
+
+- a283553: Fix bug where ESM modules failed on React < 18, and fix SSR rendering bug.
+
 ## 0.3.1
 
 ### Patch Changes
