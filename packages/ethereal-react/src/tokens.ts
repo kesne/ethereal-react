@@ -63,13 +63,7 @@ const tokenMetadataAsset = createAsset(
  * @param token The token ID to load the metadata for.
  * @returns A JSON object loaded from the `tokenURI` method of the contract.
  */
-export function useTokenMetadata<
-  T extends
-    | ContractInstance<{
-        tokenURI(index: BigNumberish): Promise<string>;
-      }>
-    | Contract = Contract
->(contract: T, token: BigNumberish) {
+export function useTokenMetadata(contract: Contract, token: BigNumberish) {
   return tokenMetadataAsset.read(contract as Contract, token);
 }
 
