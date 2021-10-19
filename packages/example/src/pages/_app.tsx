@@ -10,7 +10,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <WalletProvider
       cacheProvider
-      network="ropsten"
+      network="localhost"
       providerOptions={{
         walletconnect: {
           package: WalletConnectProvider,
@@ -22,7 +22,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       fallback={<ConnectButton />}
     >
       <Suspense fallback="Loading...">
-        <RequireNetwork chainId={3} fallback={<SwitchNetwork />}>
+        <RequireNetwork chainId={1337} fallback={<SwitchNetwork />}>
           <Component {...pageProps} />
         </RequireNetwork>
       </Suspense>

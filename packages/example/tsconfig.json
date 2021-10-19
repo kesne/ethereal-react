@@ -6,12 +6,15 @@
     "allowJs": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "module": "commonjs",
     "paths": {
       "ethereal-react": ["../ethereal-react/src"]
     }
   },
   "include": [
+    "hardhat.config.ts",
     "next-env.d.ts",
+    "./deploy",
     "**/*.ts",
     "**/*.tsx"
   ],
