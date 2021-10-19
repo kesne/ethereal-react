@@ -2,7 +2,6 @@ import { Contract } from "@ethersproject/contracts";
 import { BigNumber, BigNumberish } from "@ethersproject/bignumber";
 import { createAsset } from "./utils/use-asset";
 import { useAddressOrDefault } from "./accounts";
-import { ContractInstance } from "./types";
 import { useReadContract } from "./contracts";
 
 const tokenBalanceAsset = createAsset(
@@ -19,13 +18,7 @@ const tokenBalanceAsset = createAsset(
  * @param contract The smart contract address for the token. Should be an ERC20 or ERC721 contract.
  * @param address The address. Defaults to the address of the connected wallet.
  */
-export function useTokenBalance<
-  T extends
-    | ContractInstance<{
-        balanceOf(address: string): Promise<BigNumber>;
-      }>
-    | Contract = Contract
->(contract: T, address?: string) {
+export function useTokenBalance(contract: Contract, address?: string) {
   const userAddress = useAddressOrDefault(address);
   return tokenBalanceAsset.read(contract as Contract, address ?? userAddress);
 }
@@ -70,13 +63,7 @@ const tokenMetadataAsset = createAsset(
  * @param token The token ID to load the metadata for.
  * @returns A JSON object loaded from the `tokenURI` method of the contract.
  */
-export function useTokenMetadata<
-  T extends
-    | ContractInstance<{
-        tokenURI(index: BigNumberish): Promise<string>;
-      }>
-    | Contract = Contract
->(contract: T, token: BigNumberish) {
+export function useTokenMetadata(contract: Contract, token: BigNumberish) {
   return tokenMetadataAsset.read(contract as Contract, token);
 }
 
@@ -91,17 +78,11 @@ export function useTokenMetadata<
  * @param address The owner address that will be used to load the token ID. Defaults to the currently connected wallet address.
  * @returns A JSON object loaded from the `tokenURI` method of the contract.
  */
-export function useTokenMetadataByIndex<
-  T extends
-    | ContractInstance<{
-        tokenURI(token: BigNumberish): Promise<string>;
-        tokenOfOwnerByIndex(
-          address: string,
-          index: BigNumberish
-        ): Promise<BigNumber>;
-      }>
-    | Contract = Contract
->(contract: T, index: BigNumberish, address?: string) {
+export function useTokenMetadataByIndex(
+  contract: Contract,
+  index: BigNumberish,
+  address?: string
+) {
   const userAddress = useAddressOrDefault(address);
   const tokenID = useReadContract(
     contract as Contract,

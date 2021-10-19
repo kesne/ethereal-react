@@ -7,6 +7,7 @@ import {
   useReadContract,
   useUserAddress,
 } from "ethereal-react";
+import TechStackDeployment from "../../deployments/localhost/TechStack.json";
 
 function TechStackPreview({
   index,
@@ -32,13 +33,10 @@ function TechStackPreview({
 }
 
 export function TechStackList() {
-  const TechStack = useContract(
-    // PROD:
-    // "0x6A63Bb17c831555783b46C6B344237E80372C97F",
-    // ROPSTEN:
-    "0x2A4eEfd9679aB26c5FD70D8A5982025dC6Ca6EC2",
-    [...ERC721_ABI, "function claim(uint256 tokenId)"]
-  );
+  const TechStack = useContract(TechStackDeployment.address, [
+    ...ERC721_ABI,
+    "function claim(uint256 tokenId)",
+  ]);
 
   const balance = useTokenBalance(TechStack);
 
