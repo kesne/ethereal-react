@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkwebsite=self.webpackChunkwebsite||[]).push([[9530],{5510:function(e){e.exports=JSON.parse('{"id":23,"name":"useWeb3Modal","nextId":37,"permalink":"/ethereal-react/api/ethereal-react/function/useWeb3Modal","previousId":77}')}}]);

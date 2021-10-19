@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkwebsite=self.webpackChunkwebsite||[]).push([[8703],{2053:function(e){e.exports=JSON.parse('{"id":98,"name":"useSwitchNetwork","nextId":55,"permalink":"/ethereal-react/api/ethereal-react/function/useSwitchNetwork","previousId":81}')}}]);
