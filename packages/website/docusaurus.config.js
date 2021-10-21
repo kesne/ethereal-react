@@ -1,14 +1,15 @@
 const path = require("path");
 const lightCodeTheme = require("prism-react-renderer/themes/github");
 const darkCodeTheme = require("prism-react-renderer/themes/dracula");
-const pkg = require('../ethereal-react/package.json');
+const pkg = require("../ethereal-react/package.json");
 
 // With JSDoc @type annotations, IDEs can provide config autocompletion
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 (
   module.exports = {
     title: "Ethereal React",
-    tagline: "A collection of React hooks and components, making it easy to develop frontends for Ethereum dApps.",
+    tagline:
+      "A collection of React hooks and components, making it easy to develop frontends for Ethereum dApps.",
     url: "https://kesne.github.io/",
     baseUrl: "/ethereal-react/",
     onBrokenLinks: "throw",
@@ -22,7 +23,7 @@ const pkg = require('../ethereal-react/package.json');
       [
         "docusaurus-plugin-typedoc-api",
         {
-          projectRoot: path.join(__dirname, "..", 'ethereal-react'),
+          projectRoot: path.join(__dirname, "..", "ethereal-react"),
           packages: ["."],
         },
       ],
@@ -34,7 +35,7 @@ const pkg = require('../ethereal-react/package.json');
         /** @type {import('@docusaurus/preset-classic').Options} */
         ({
           docs: {
-            routeBasePath: '/',
+            routeBasePath: "/",
             sidebarPath: require.resolve("./sidebars.js"),
             editUrl:
               "https://github.com/kesne/ethereal-react/edit/main/packages/website/",
@@ -86,6 +87,13 @@ const pkg = require('../ethereal-react/package.json');
         prism: {
           theme: lightCodeTheme,
           darkTheme: darkCodeTheme,
+        },
+        algolia: {
+          appId: 'BH4D9OD16A',
+          apiKey: 'f61089ad1969eedcb146c5c351c28b69',
+          indexName: 'ethereal-react',
+          contextualSearch: false,
+          searchParameters: {},
         },
       }),
   }
