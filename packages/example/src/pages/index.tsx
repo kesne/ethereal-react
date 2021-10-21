@@ -1,4 +1,4 @@
-import { Suspense, useState } from "react";
+import React, { Suspense, useState } from "react";
 import {
   useContract,
   ERC721_ABI,
@@ -10,9 +10,14 @@ import {
   Contract,
   ContractTransaction,
   useDisconnectWallet,
+  WalletProvider,
+  RequireNetwork,
 } from "ethereal-react";
 import { TechStackList } from "../components/TechStackList";
 import TechStackDeployment from "../../deployments/localhost/TechStack.json";
+import WalletConnectProvider from "@walletconnect/web3-provider";
+import { ConnectButton } from "src/components/ConnectButton";
+import { SwitchNetwork } from "src/components/SwitchNetwork";
 
 function Minted({
   transaction,
@@ -66,7 +71,7 @@ function Minter({ contract }: { contract: Contract }) {
   );
 }
 
-export default function App() {
+function Home() {
   const disconnect = useDisconnectWallet();
   const [block] = useBlock();
   const balance = useBalance();
@@ -83,5 +88,30 @@ export default function App() {
       <Minter contract={TechStack} />
       <button onClick={disconnect}>Disconnect</button>
     </div>
+  );
+}
+
+export default function HomePage() {
+  return (
+    <WalletProvider
+      cacheProvider
+      network="localhost"
+      providerOptions={{
+        walletconnect: {
+          package: WalletConnectProvider,
+          options: {
+            infuraId: process.env.NEXT_PUBLIC_INFURA_ID,
+          },
+        },
+      }}
+      fallback={<ConnectButton />}
+      loading={null}
+    >
+      <Suspense fallback="Loading...">
+        <RequireNetwork chainId={1337} fallback={<SwitchNetwork />}>
+          <Home />
+        </RequireNetwork>
+      </Suspense>
+    </WalletProvider>
   );
 }
