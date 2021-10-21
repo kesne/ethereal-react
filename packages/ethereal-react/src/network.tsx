@@ -1,23 +1,7 @@
 import { ReactNode } from "react";
-import { Web3Provider } from "@ethersproject/providers";
-import { useProvider, EtherealProvider } from "./provider";
-import { createAsset } from "./utils/use-asset";
+import { useProvider } from "./provider";
 import { useMutation } from "./utils/use-mutation";
-
-const networkAsset = createAsset(async (provider: EtherealProvider) => {
-  return provider.getNetwork();
-});
-
-/**
- * Returns the current chain information for currently-connected Ethereum network.
- *
- * @returns An `ethers` `Network` object.
- * @see https://docs.ethers.io/v5/api/providers/types/#providers-Network
- */
-export function useNetwork() {
-  const provider = useProvider();
-  return networkAsset.read(provider);
-}
+import { useWalletContext } from "./wallet";
 
 /**
  * @see https://docs.metamask.io/guide/rpc-api.html#wallet-addethereumchain
@@ -50,11 +34,11 @@ export function useSwitchNetwork(options: SwitchNetworkOptions) {
   const { chainId, ...networkConfig } = options;
   const chainIdHex = `0x${chainId.toString(16)}`;
 
-  const provider = useProvider();
+  const { provider } = useWalletContext("useSwitchNetwork");
 
-  if (!(provider instanceof Web3Provider)) {
+  if (!provider) {
     throw new Error(
-      "The `useSwitchNetwork` hook only supports being used within a `WalletProvider`."
+      "The `useSwitchNetwork` hook cannot be used without a connected wallet."
     );
   }
 
@@ -77,6 +61,7 @@ export function useSwitchNetwork(options: SwitchNetworkOptions) {
 }
 
 interface RequireNetworkProps {
+  providerName?: string;
   chainId: number;
   fallback: ReactNode;
   children: ReactNode;
@@ -88,9 +73,10 @@ interface RequireNetworkProps {
  * The {@link useSwitchNetwork} hook can be used to prompt the user to switch their network to the expected network.
  */
 export function RequireNetwork(props: RequireNetworkProps) {
-  const { chainId, fallback, children } = props;
+  const { chainId, fallback, children, providerName } = props;
 
-  const network = useNetwork();
+  const provider = useProvider(providerName);
+  const network = provider.readNetwork();
 
   return <>{network.chainId === chainId ? children : fallback}</>;
 }

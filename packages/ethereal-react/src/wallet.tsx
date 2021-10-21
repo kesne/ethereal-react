@@ -20,7 +20,7 @@ const WalletContext = createContext<{
   updateProvider(provider: ExternalProvider | null): void;
 } | null>(null);
 
-function useWalletContext(hookName: string) {
+export function useWalletContext(hookName: string) {
   const walletContext = useContext(WalletContext);
 
   if (!walletContext) {

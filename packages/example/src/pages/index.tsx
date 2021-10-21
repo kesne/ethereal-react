@@ -4,12 +4,11 @@ import {
   ERC721_ABI,
   useWriteContract,
   useWaitForTransaction,
-  useBlock,
   useReadContract,
-  useBalance,
   Contract,
   ContractTransaction,
   useDisconnectWallet,
+  useProvider,
 } from "ethereal-react";
 import { TechStackList } from "../components/TechStackList";
 import TechStackDeployment from "../../deployments/localhost/TechStack.json";
@@ -68,8 +67,9 @@ function Minter({ contract }: { contract: Contract }) {
 
 export default function App() {
   const disconnect = useDisconnectWallet();
-  const [block] = useBlock();
-  const balance = useBalance();
+  const provider = useProvider();
+  const block = provider.readBlock();
+  const balance = provider.readBalance();
   const TechStack = useContract(TechStackDeployment.address, [
     ...ERC721_ABI,
     "function claim(uint256 tokenId)",

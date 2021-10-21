@@ -1,11 +1,10 @@
 import type { Web3Provider, JsonRpcProvider } from "@ethersproject/providers";
 import { createContext, ReactNode, useContext, useMemo } from "react";
+import { FatProvider, makeFatProvider } from "./Provider/FatProvider";
 
 export type EtherealProvider = Web3Provider | JsonRpcProvider;
 
-export const ProvidersContext = createContext<Record<string, EtherealProvider>>(
-  {}
-);
+export const ProvidersContext = createContext<Record<string, FatProvider>>({});
 
 interface ProviderProps {
   name?: string;
@@ -19,7 +18,7 @@ export function Provider(props: ProviderProps) {
   const newContext = useMemo(
     () => ({
       ...providers,
-      [name]: provider,
+      [name]: makeFatProvider(provider),
     }),
     [providers, provider, name]
   );
