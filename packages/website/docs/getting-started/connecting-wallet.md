@@ -66,17 +66,17 @@ function App() {
 }
 ```
 
-## Logging Out (Disconnect Wallet)
+## Disconnect the Wallet (logging out)
 
-When your user has connected their wallet to your app, you may want to allow them to disconnect their wallet. This is done through the `useLogout` hook. This hook must be rendered within the `WalletProvider` component.
+When your user has connected their wallet to your app, you may want to allow them to disconnect their wallet. This is done through the `useDisconnectWallet` hook. This hook must be rendered within the `WalletProvider` component.
 
 ```tsx
-import { useLogout } from "ethereal-react";
+import { useDisconnectWallet } from "ethereal-react";
 
-function LogoutButton() {
-  const logout = useLogout();
-  return <button onClick={logout}>Logout</button>;
+function DisconnectButton() {
+  const disconnect = useDisconnectWallet();
+  return <button onClick={disconnect}>Disconnect</button>;
 }
 ```
 
-When the logout button is clicked, the `fallback` of the `WalletProvider` will be rendered. If the `cachedProvider` property is set, then the cached providers will be removed as well.
+When the disconnect button is clicked, the `fallback` of the `WalletProvider` will be rendered. If the `cachedProvider` property is set, then the cached providers will be removed as well.

@@ -14,50 +14,79 @@ import { Provider } from "./provider";
 import { safeBatchedUpdates } from "./utils/batch-updates";
 import { useMutation } from "./utils/use-mutation";
 
-const Web3ModalContext = createContext<{
+const WalletContext = createContext<{
   web3Modal: Web3Modal | null;
+  provider: Web3Provider | null;
   updateProvider(provider: ExternalProvider | null): void;
 } | null>(null);
 
-interface WalletProviderProps extends Partial<ICoreOptions> {
-  name?: string;
-  fallback: ReactNode;
-  children: ReactNode;
-  // Allow passing a fully-configured web3modal instance:
-  web3Modal?: Web3Modal;
+function useWalletContext(hookName: string) {
+  const walletContext = useContext(WalletContext);
+
+  if (!walletContext) {
+    throw new Error(
+      `The "${hookName}" hook must be used inside of a "WalletProvider".`
+    );
+  }
+
+  return walletContext;
 }
 
 export function useWeb3Modal() {
-  const web3ModalContext = useContext(Web3ModalContext);
-
-  if (!web3ModalContext) {
-    throw new Error(
-      "The `useWeb3Modal` hook must be used inside of the `WalletProvider`."
-    );
-  }
-
-  return web3ModalContext.web3Modal;
+  const { web3Modal } = useWalletContext("useWeb3Modal");
+  return web3Modal;
 }
 
-export function useLogout() {
-  const web3ModalContext = useContext(Web3ModalContext);
-
-  if (!web3ModalContext) {
-    throw new Error(
-      "The `useLogout` hook must be used inside of the `WalletProvider`."
-    );
-  }
+export function useDisconnectWallet() {
+  const walletContext = useWalletContext("useDisconnectWallet");
 
   return () => {
-    web3ModalContext.updateProvider(null);
-    web3ModalContext.web3Modal?.clearCachedProvider();
+    walletContext.updateProvider(null);
+    walletContext.web3Modal?.clearCachedProvider();
   };
+}
+
+export function useWalletConnected() {
+  const walletContext = useWalletContext("useWalletConnected");
+  return !!walletContext.provider;
+}
+
+interface WalletProviderProps extends Partial<ICoreOptions> {
+  name?: string;
+  /**
+   * The fallback will be rendered when the wallet
+   * If you wish to instead always render the `children`, even when the wallet
+   * is connected, then you can use the `noFallback` prop, and omit this prop.
+   */
+  fallback?: ReactNode;
+  /**
+   * If you would like to
+   */
+  noFallback?: boolean;
+  /**
+   * While the wallet connection is initializing, you can optionally display
+   * a different node than the `fallback` node. This can prevent the user from
+   * seeing a flash of the fallback node when they have a cached wallet connected.
+   * In the future, this may instead be powered by suspense.
+   */
+  loading?: ReactNode;
+  /**
+   * The React elements that will be rendered when the wallet is connected.
+   * If `noFallback` is provided, then this will always be rendered.
+   */
+  children: ReactNode;
+  /**
+   * A fully-configured instance of Web3Modal.
+   */
+  web3Modal?: Web3Modal;
 }
 
 export function WalletProvider(props: WalletProviderProps) {
   const {
     name = "default",
     fallback,
+    noFallback,
+    loading,
     children,
     web3Modal: providedWeb3Modal,
     ...web3ModalOptions
@@ -68,19 +97,19 @@ export function WalletProvider(props: WalletProviderProps) {
 
   const [provider, setProvider] = useState<Web3Provider | null>(null);
 
+  const [initialized, setInitialized] = useState(false);
+
   const web3Modal = useMemo(() => {
     // To support SSR environments, we just create this as null:
     if (typeof window === "undefined") return null;
 
-    if (providedWeb3Modal) return providedWeb3Modal;
-
-    return new Web3Modal(web3ModalOptions);
+    return providedWeb3Modal || new Web3Modal(web3ModalOptions);
   }, [providedWeb3Modal]);
 
   const updateProvider = useCallback((provider: ExternalProvider) => {
     safeBatchedUpdates(() => {
       setExternalProvider(provider);
-      setProvider(new Web3Provider(provider));
+      setProvider(provider ? new Web3Provider(provider) : null);
     });
   }, []);
 
@@ -90,7 +119,12 @@ export function WalletProvider(props: WalletProviderProps) {
     // If we have a cached provider, and we wish to honor the cached provider,
     // then automatically just connect to that.
     if (web3Modal.cachedProvider && web3ModalOptions.cacheProvider) {
-      web3Modal.connect().then(updateProvider);
+      web3Modal.connect().then((provider) => {
+        setInitialized(true);
+        updateProvider(provider);
+      });
+    } else {
+      setInitialized(true);
     }
   }, [web3Modal]);
 
@@ -100,17 +134,23 @@ export function WalletProvider(props: WalletProviderProps) {
     if (!provider || !externalProvider) return;
 
     const events = [
-      ["chainChanged", () => setProvider(new Web3Provider(externalProvider))],
-      [
-        "accountsChanged",
-        () => setProvider(new Web3Provider(externalProvider)),
-      ],
-      ["disconnect", () => setProvider(null)],
+      {
+        name: "chainChanged",
+        handle: () => setProvider(new Web3Provider(externalProvider)),
+      },
+      {
+        name: "accountsChanged",
+        handle: () => setProvider(new Web3Provider(externalProvider)),
+      },
+      {
+        name: "disconnect",
+        handle: () => setProvider(null),
+      },
     ] as const;
 
     try {
-      events.forEach(([key, fn]) => {
-        (externalProvider as EventEmitter).on(key, fn);
+      events.forEach(({ name, handle }) => {
+        (externalProvider as EventEmitter).on(name, handle);
       });
     } catch (e) {
       console.warn(
@@ -121,8 +161,8 @@ export function WalletProvider(props: WalletProviderProps) {
 
     return () => {
       try {
-        events.forEach(([key, fn]) => {
-          (externalProvider as EventEmitter).removeListener(key, fn);
+        events.forEach(({ name, handle }) => {
+          (externalProvider as EventEmitter).removeListener(name, handle);
         });
       } catch (e) {
         console.warn(
@@ -133,29 +173,42 @@ export function WalletProvider(props: WalletProviderProps) {
     };
   }, [provider, externalProvider]);
 
+  if (fallback && noFallback) {
+    throw new Error(
+      "You cannot specify both `noFallback` and a `fallback` prop."
+    );
+  }
+
+  if (!fallback && !noFallback) {
+    throw new Error(
+      "No fallback prop was found. Either specify a fallback for when the wallet is not connected, or use the `noFallback` prop to disable the fallback entirely"
+    );
+  }
+
+  // The fallback node is either the `fallback` prop, or the `loading` prop.
+  const fallbackNode = initialized
+    ? fallback
+    : typeof loading === "undefined"
+    ? fallback
+    : loading;
+
   return (
-    <Web3ModalContext.Provider value={{ web3Modal, updateProvider }}>
+    <WalletContext.Provider value={{ web3Modal, provider, updateProvider }}>
       {provider ? (
         <Provider name={name} provider={provider}>
           {children}
         </Provider>
+      ) : noFallback ? (
+        children
       ) : (
-        fallback
+        fallbackNode
       )}
-    </Web3ModalContext.Provider>
+    </WalletContext.Provider>
   );
 }
 
 export function useConnectToWallet() {
-  const web3ModalContext = useContext(Web3ModalContext);
-
-  if (!web3ModalContext) {
-    throw new Error(
-      "The `useConnectToWallet` hook must be used inside of the `fallback` of the `WalletProvider`."
-    );
-  }
-
-  const { web3Modal, updateProvider } = web3ModalContext;
+  const { web3Modal, updateProvider } = useWalletContext("useConnectToWallet");
 
   return useMutation(async () => {
     if (!web3Modal) {
@@ -163,6 +216,7 @@ export function useConnectToWallet() {
         "Attempting to connect, but no `web3modal` instance was found."
       );
     }
+
     return web3Modal.connect().then(updateProvider);
   }, [web3Modal]);
 }
