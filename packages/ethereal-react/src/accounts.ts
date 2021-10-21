@@ -6,8 +6,8 @@ const userAddressCache = createAsset(async (provider: EtherealProvider) => {
   return provider.getSigner().getAddress();
 });
 
-export function useAddressOrDefault(address?: string) {
-  const provider = useProvider();
+export function useAddressOrDefault(address?: string, providerName?: string) {
+  const provider = useProvider(providerName);
   if (address) {
     return address;
   }
@@ -18,8 +18,8 @@ export function useAddressOrDefault(address?: string) {
  * Loads the public address of the currently connected wallet.
  * This hook will suspend while it loads.
  */
-export function useUserAddress() {
-  const provider = useProvider();
+export function useUserAddress(providerName?: string) {
+  const provider = useProvider(providerName);
   return userAddressCache.read(provider);
 }
 
@@ -37,8 +37,8 @@ const balanceAsset = createAsset(
  * @returns The current balance of the address, in wei.
  * @see https://docs.ethers.io/v5/single-page/#/v5/api/providers/provider/-%23-Provider-getBalance
  */
-export function useBalance(address?: string): BigNumber {
-  const provider = useProvider();
+export function useBalance(address?: string, providerName?: string): BigNumber {
+  const provider = useProvider(providerName);
   const userAddress = useAddressOrDefault(address);
   return balanceAsset.read(provider, userAddress);
 }

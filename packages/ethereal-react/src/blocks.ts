@@ -16,8 +16,8 @@ const blockAsset = createAsset(async (provider: EtherealProvider) => {
  * @see https://docs.ethers.io/v5/api/providers/provider/#Provider-getBlock
  * @see https://docs.ethers.io/v5/api/providers/types/#providers-Block
  */
-export function useBlock() {
-  const provider = useProvider();
+export function useBlock(providerName?: string) {
+  const provider = useProvider(providerName);
   const [block, refresh] = useAsset(blockAsset, provider);
   const [isInFlight, startTransition] = useSafeTransition();
 
@@ -46,8 +46,8 @@ export function useBlock() {
  *
  * @returns A `Block` object from `ethers`.
  */
-export function useBlockOnce() {
-  const provider = useProvider();
+export function useBlockOnce(providerName?: string) {
+  const provider = useProvider(providerName);
   const block = blockAsset.read(provider);
   return block;
 }

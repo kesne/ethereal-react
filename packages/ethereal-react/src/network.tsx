@@ -14,8 +14,8 @@ const networkAsset = createAsset(async (provider: EtherealProvider) => {
  * @returns An `ethers` `Network` object.
  * @see https://docs.ethers.io/v5/api/providers/types/#providers-Network
  */
-export function useNetwork() {
-  const provider = useProvider();
+export function useNetwork(providerName?: string) {
+  const provider = useProvider(providerName);
   return networkAsset.read(provider);
 }
 
@@ -46,11 +46,14 @@ type SwitchNetworkOptions =
   | AddEthereumChainParameter
   | SwitchEthereumChainParameter;
 
-export function useSwitchNetwork(options: SwitchNetworkOptions) {
+export function useSwitchNetwork(
+  options: SwitchNetworkOptions,
+  providerName?: string
+) {
   const { chainId, ...networkConfig } = options;
   const chainIdHex = `0x${chainId.toString(16)}`;
 
-  const provider = useProvider();
+  const provider = useProvider(providerName);
 
   if (!(provider instanceof Web3Provider)) {
     throw new Error(

@@ -43,9 +43,10 @@ const contractAsset = createAsset(
 
 export function useContract<T extends ContractInstance = Contract>(
   address: string,
-  typechainFactoryOrABI: ContractInterface | ContractFactory<T>
+  typechainFactoryOrABI: ContractInterface | ContractFactory<T>,
+  providerName?: string
 ): T {
-  const provider = useProvider();
+  const provider = useProvider(providerName);
 
   return contractAsset.read(provider, address, typechainFactoryOrABI);
 }

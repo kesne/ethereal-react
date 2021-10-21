@@ -5,7 +5,7 @@ const gasAsset = createAsset((provider: EtherealProvider) => {
   return provider.getGasPrice();
 });
 
-export function useGasPrice() {
-  const provider = useProvider();
+export function useGasPrice(providerName?: string) {
+  const provider = useProvider(providerName);
   return gasAsset.read(provider);
 }

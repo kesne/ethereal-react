@@ -28,8 +28,8 @@ export function useWaitForTransaction(
  *
  * @see https://docs.ethers.io/v5/api/signer/#Signer-signMessage
  */
-export function useSignMessage() {
-  const provider = useProvider();
+export function useSignMessage(providerName?: string) {
+  const provider = useProvider(providerName);
   return useMutation(async (message: string) => {
     return provider.getSigner().signMessage(message);
   }, []);

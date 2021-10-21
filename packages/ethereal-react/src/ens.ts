@@ -8,8 +8,8 @@ const resolveENSAsset = createAsset(
   }
 );
 
-export function useResolveENS(ensName: string) {
-  const provider = useProvider();
+export function useResolveENS(ensName: string, providerName?: string) {
+  const provider = useProvider(providerName);
   return resolveENSAsset.read(provider, ensName);
 }
 
@@ -29,8 +29,8 @@ const ensForAddressAsset = createAsset(
   }
 );
 
-export function useENSForAddress(address?: string) {
-  const provider = useProvider();
+export function useENSForAddress(address?: string, providerName?: string) {
+  const provider = useProvider(providerName);
   const userAddress = useAddressOrDefault(address);
   return ensForAddressAsset.read(provider, userAddress);
 }
