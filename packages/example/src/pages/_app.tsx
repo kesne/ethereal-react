@@ -20,6 +20,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         },
       }}
       fallback={<ConnectButton />}
+      loading={null}
     >
       <Suspense fallback="Loading...">
         <RequireNetwork chainId={1337} fallback={<SwitchNetwork />}>

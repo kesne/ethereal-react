@@ -2,8 +2,9 @@ export { useProvider, Provider } from "./provider";
 export {
   useConnectToWallet,
   WalletProvider,
-  useLogout,
+  useDisconnectWallet,
   useWeb3Modal,
+  useWalletConnected
 } from "./wallet";
 export { useContract, useReadContract, useWriteContract } from "./contracts";
 export { useUserAddress, useBalance } from "./accounts";

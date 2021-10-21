@@ -9,7 +9,7 @@ import {
   useBalance,
   Contract,
   ContractTransaction,
-  useLogout,
+  useDisconnectWallet,
 } from "ethereal-react";
 import { TechStackList } from "../components/TechStackList";
 import TechStackDeployment from "../../deployments/localhost/TechStack.json";
@@ -66,10 +66,8 @@ function Minter({ contract }: { contract: Contract }) {
   );
 }
 
-console.log(TechStackDeployment);
-
 export default function App() {
-  const logout = useLogout();
+  const disconnect = useDisconnectWallet();
   const [block] = useBlock();
   const balance = useBalance();
   const TechStack = useContract(TechStackDeployment.address, [
@@ -83,7 +81,7 @@ export default function App() {
       <div>Balance: {balance.toString()}</div>
       <TechStackList />
       <Minter contract={TechStack} />
-      <button onClick={logout}>Logout</button>
+      <button onClick={disconnect}>Disconnect</button>
     </div>
   );
 }
