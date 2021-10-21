@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkwebsite=self.webpackChunkwebsite||[]).push([[2066],{6029:function(e){e.exports=JSON.parse('{"id":16,"name":"WalletProvider","nextId":52,"permalink":"/ethereal-react/api/ethereal-react/function/WalletProvider","previousId":108}')}}]);

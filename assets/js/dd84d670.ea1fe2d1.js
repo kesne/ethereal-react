@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkwebsite=self.webpackChunkwebsite||[]).push([[2190],{6227:function(e){e.exports=JSON.parse('{"id":95,"name":"useResolveENS","nextId":83,"permalink":"/ethereal-react/api/ethereal-react/function/useResolveENS","previousId":32}')}}]);

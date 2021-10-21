@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkwebsite=self.webpackChunkwebsite||[]).push([[5343],{3728:function(e){e.exports=JSON.parse('{"id":83,"name":"useSignMessage","nextId":100,"permalink":"/ethereal-react/api/ethereal-react/function/useSignMessage","previousId":95}')}}]);

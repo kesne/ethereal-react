@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkwebsite=self.webpackChunkwebsite||[]).push([[1553],{2051:function(e){e.exports=JSON.parse('{"id":39,"name":"useWriteContract","nextId":71,"permalink":"/ethereal-react/api/ethereal-react/function/useWriteContract","previousId":23}')}}]);

@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkwebsite=self.webpackChunkwebsite||[]).push([[5376],{7525:function(e){e.exports=JSON.parse('{"id":73,"name":"useBlock","nextId":75,"permalink":"/ethereal-react/api/ethereal-react/function/useBlock","previousId":54}')}}]);

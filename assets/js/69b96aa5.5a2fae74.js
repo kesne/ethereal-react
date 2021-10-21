@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkwebsite=self.webpackChunkwebsite||[]).push([[9736],{6366:function(e){e.exports=JSON.parse('{"id":77,"name":"useGasPrice","nextId":98,"permalink":"/ethereal-react/api/ethereal-react/function/useGasPrice","previousId":92}')}}]);
