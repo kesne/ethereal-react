@@ -22,7 +22,7 @@ const ensForAddressAsset = createAsset(
     const ensName = await provider.lookupAddress(address);
     const resolvedAddress = await provider.resolveName(ensName);
     if (resolvedAddress === address) {
-      return address;
+      return ensName;
     }
 
     return null;
