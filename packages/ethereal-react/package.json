@@ -1,6 +1,6 @@
 {
   "name": "ethereal-react",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "description": "React hooks and components to make it easy to develop Ethereum dApps.",
   "sideEffects": false,
   "source": "src/index.ts",
