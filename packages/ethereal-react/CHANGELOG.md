@@ -1,5 +1,18 @@
 # ethereal-react
 
+## 0.4.0
+
+### Minor Changes
+
+- 2ba0c63: Add `noFallback` prop to the WalletProvider.
+- 2ba0c63: Rename `useLogout` hook to `useDisconnectWallet`.
+
+### Patch Changes
+
+- 2ba0c63: Expose new `useWalletConnected` hook.
+- b225b0e: Fix ENS resolution returning address
+- 2ba0c63: Add new `loading` prop to the `WalletProvider` to allow a different node to be rendered while the wallet initializes.
+
 ## 0.3.2
 
 ### Patch Changes
