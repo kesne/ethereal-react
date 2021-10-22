@@ -10,7 +10,7 @@ import {
   useState,
 } from "react";
 import Web3Modal, { ICoreOptions } from "web3modal";
-import { Provider } from "./provider";
+import { EtherealProvider } from "./provider";
 import { safeBatchedUpdates } from "./utils/batch-updates";
 import { useMutation } from "./utils/use-mutation";
 
@@ -195,9 +195,9 @@ export function WalletProvider(props: WalletProviderProps) {
   return (
     <WalletContext.Provider value={{ web3Modal, provider, updateProvider }}>
       {provider ? (
-        <Provider name={name} provider={provider}>
+        <EtherealProvider name={name} provider={provider}>
           {children}
-        </Provider>
+        </EtherealProvider>
       ) : noFallback ? (
         children
       ) : (

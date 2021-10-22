@@ -1,10 +1,12 @@
 import type { Web3Provider, JsonRpcProvider } from "@ethersproject/providers";
 import { createContext, ReactNode, useContext, useMemo } from "react";
-import { FatProvider, makeFatProvider } from "./Provider/FatProvider";
+import { EtherealContextValue, createEthereal } from "./Ethereal";
 
 export type EtherealProvider = Web3Provider | JsonRpcProvider;
 
-export const ProvidersContext = createContext<Record<string, FatProvider>>({});
+export const ProvidersContext = createContext<
+  Record<string, EtherealContextValue>
+>({});
 
 interface ProviderProps {
   name?: string;
@@ -12,13 +14,13 @@ interface ProviderProps {
   children: ReactNode;
 }
 
-export function Provider(props: ProviderProps) {
+export function EtherealProvider(props: ProviderProps) {
   const { name = "default", provider, children } = props;
   const providers = useContext(ProvidersContext);
   const newContext = useMemo(
     () => ({
       ...providers,
-      [name]: makeFatProvider(provider),
+      [name]: createEthereal(provider),
     }),
     [providers, provider, name]
   );
@@ -30,7 +32,7 @@ export function Provider(props: ProviderProps) {
   );
 }
 
-export function useProvider(name: string = "default") {
+export function useEthereal(name: string = "default") {
   const providers = useContext(ProvidersContext);
 
   if (!Object.keys(providers).length) {

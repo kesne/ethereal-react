@@ -18,11 +18,11 @@ const PROVIDER_FNS = {
   ...transactionFns,
 } as const;
 
-export type FatProvider = typeof PROVIDER_FNS & {
+export type EtherealContextValue = typeof PROVIDER_FNS & {
   ethers: EtherealProvider;
 };
 
-export function makeFatProvider(provider: EtherealProvider) {
+export function createEthereal(provider: EtherealProvider) {
   const cache = new ProviderCache();
 
   const fatProvider = Object.fromEntries(
@@ -39,5 +39,5 @@ export function makeFatProvider(provider: EtherealProvider) {
   return {
     ...fatProvider,
     ethers: provider,
-  } as FatProvider;
+  } as EtherealContextValue;
 }
