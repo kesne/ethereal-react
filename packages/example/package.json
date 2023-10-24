@@ -15,7 +15,7 @@
     "ethers": "^5.0.0",
     "hardhat": "^2.6.6",
     "hardhat-deploy": "^0.9.4",
-    "next": "^11.1.2",
+    "next": "^13.5.0",
     "next-transpile-modules": "^8.0.0",
     "react": "18.0.0-alpha-996da67b2-20211018",
     "react-dom": "18.0.0-alpha-996da67b2-20211018",
